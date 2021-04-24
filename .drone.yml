@@ -1,0 +1,49 @@
+kind: pipeline
+type: docker
+name: C Kurs
+steps:
+  - name: retrieve current sheet
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - export SHEET=$(curl https://courses.inpro.informatik.uni-freiburg.de/2021-SS/c-kurs/active_exercises | head -n 1)
+      - 'echo Currently active exercise directory: $SHEET'
+      - echo $SHEET > current_sheet
+  - name: make compile
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - cd $(cat current_sheet)
+      - make compile
+    depends_on:
+      - retrieve current sheet
+  - name: make test
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - cd $(cat current_sheet)
+      - make test
+    depends_on:
+      - make compile
+  - name: make checkstyle
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - cd $(cat current_sheet)
+      - make checkstyle
+    depends_on:
+      - make compile
+  - name: check clang-format
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - check_clang_format -r $(cat current_sheet)
+    depends_on:
+      - make compile
+  - name: check erfahrungen.txt
+    image: 2021-ss-c
+    pull: never
+    commands:
+      - check_erfahrungen $(cat current_sheet)
+    depends_on:
+      - make compile

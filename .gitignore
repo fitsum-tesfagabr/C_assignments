@@ -1,0 +1,9 @@
+*.swp
+*.swo
+*.o
+*.so
+*.a
+*main
+*test
+.idea
+.vscode

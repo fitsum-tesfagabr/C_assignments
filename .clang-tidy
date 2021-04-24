@@ -1,0 +1,61 @@
+---
+Checks:                'readability-identifier-naming'
+WarningsAsErrors:      ''
+HeaderFilterRegex:     ''
+AnalyzeTemporaryDtors: false
+FormatStyle:           none
+UseColor:              true
+WarningsAsErrors:      'readability-identifier-naming'
+CheckOptions:    
+  - key:             readability-identifier-naming.ConstantCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.ConstantParameterCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.ConstantPointerParameterCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.EnumCase
+    value:           'CamelCase'
+  - key:             readability-identifier-naming.EnumConstantCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.FunctionCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.GlobalConstantCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.GlobalConstantPointerCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.GlobalFunctionCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.GlobalFunctionCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.GlobalPointerCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.GlobalPointerCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.GlobalVariableCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.LocalConstantCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.LocalConstantPointerCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.LocalPointerCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.LocalVariableCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.ParameterCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.PointerParameterCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.StaticConstantCase
+    value:           'UPPER_CASE'
+  - key:             readability-identifier-naming.PointerVariableCase
+    value:           'lower_case'
+  - key:             readability-identifier-naming.StructCase
+    value:           'CamelCase'
+  - key:             readability-identifier-naming.TypedefCase
+    value:           'aNy_CasE'
+  - key:             readability-identifier-naming.UnionCase
+    value:           'CamelCase'
+  - key:             readability-identifier-naming.VariableCase
+    value:           'lower_case'
+...
+
