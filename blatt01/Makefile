@@ -3,25 +3,25 @@
 compile: hello bye
 
 test:
-	echo "Everything is ok. There are no tests, yet."
+		echo "Everything is ok. There are no tests, yet."
 
 checkstyle:
-	clang-tidy --quiet *.c --
+		clang-tidy-11 --quiet *.c --
 
 format:
-	clang-format -i *.c
+		clang-format-11 -i *.c
 
 clean:
-	rm -f hello.o hello bye.o bye
+		rm -f hello.o hello bye.o bye
 
 hello.o: hello.c
-	gcc -c hello.c -o hello.o
+		gcc -c hello.c -o hello.o
 
 hello: hello.o
-	gcc hello.o -o hello
+		gcc hello.o -o hello
 
 bye.o: bye.c
-	gcc -c bye.c -o bye.o
+		gcc -c bye.c -o bye.o
 
 bye: bye.o
-	gcc bye.o -o bye
+		gcc bye.o -o bye
