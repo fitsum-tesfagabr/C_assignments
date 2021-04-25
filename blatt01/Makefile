@@ -6,10 +6,10 @@ test:
 		echo "Everything is ok. There are no tests, yet."
 
 checkstyle:
-		clang-tidy-11 --quiet *.c --
+		clang-tidy --quiet *.c --
 
 format:
-		clang-format-11 -i *.c
+		clang-format -i *.c
 
 clean:
 		rm -f hello.o hello bye.o bye
