@@ -112,25 +112,25 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
 
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
 
-  buffer[0] = 0; /* the aim is to set the length of buffer to 0 temporarily*/
+  buffer[0] = 0; /* the aim is to set the length of buffer to 0 temporarily */
   
   /*
    * i - strings index to read each string everytime
    * j - buffer index, usefull when concatinating
    * k - string index from the strings array
-   * x - separator index
-   * */
+   * x - separator index*
+   */
   for (int i = 0; i < num_strings; i++) {
     char *s = strings[i];
 
     /* Since the strings are concatenated buff_length musst be initialized to
      * the next free space.
-     * */
+     */
     int j = strlen(buffer);
 
     /* k is used to index the string to be concatenated. Therefore, new string
      * is indexed starting from 0
-     * */
+     */
     int k = 0;
 
     /*string after string are concatenated to buffer*/
@@ -151,9 +151,9 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
      *
      * if but the last string is concatenated the end of string indicator,
      * 0 must be placed after the last string is concatenated
-     * */
+     */
     if (i < num_strings - 1) {
-      buffer[j + x] = 0; /*end of string indicator*/
+      buffer[j + x] = 0; /* end of string indicator */
     } else {
       buffer[j] = 0; 
     }
