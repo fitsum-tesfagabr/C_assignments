@@ -88,8 +88,7 @@ char *join(char **strings, size_t num_strings, char *separator) {
     }
     strcat(buffer, separator);
   }
-  buffer[num_concatenated_chars] = 0;
-
+  buffer[num_concatenated_chars - 1] = 0;
   return buffer;
 }
 
@@ -114,7 +113,13 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
 
   buffer[0] = 0; /* the aim is to set the length of buffer to 0 temporarily*/
-
+  
+  /*
+   * i - strings index to read each string everytime
+   * j - buffer index, usefull when concatinating
+   * k - string index from the strings array
+   * x - separator index
+   * */
   for (int i = 0; i < num_strings; i++) {
     char *s = strings[i];
 
@@ -129,7 +134,7 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
     int k = 0;
 
     /*string after string are concatenated to buffer*/
-    for (j, k; j < strlen(s), k < strlen(s); j++, k++) {
+    for (j, k; k < strlen(s); j++, k++) {
       buffer[j] = s[k];
     }
     int x = 0;
@@ -140,9 +145,21 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
         buffer[j + x] = separator[x];
       }
     }
-
-    buffer[j + x] = 0; /*end of string indicator*/
+    
+    /* It addes 0 everitime we iterate through the strings and conatenate
+     * them with the separator.
+     *
+     * if but the last string is concatenated the end of string indicator,
+     * 0 must be placed after the last string is concatenated
+     * */
+    if (i < num_strings - 1) {
+      buffer[j + x] = 0; /*end of string indicator*/
+    } else {
+      buffer[j] = 0; 
+    }
   }
+
+  
   return buffer;
 }
 
@@ -203,7 +220,7 @@ void test_repeat_foo_3_times(void) {
 void test_repeat_cpp_5_times(void) {
   char *s = "cpp";
   char *result = repeat(5, s);
-  TEST_ASSERT_EQUAL(0, strcmp("cppcppcppcppcpp", result));
+  TEST_ASSERT_EQUAL_STRING("cppcppcppcppcpp", result);
   free(result); /* Freed the allocated memory in function repeat*/
 }
 
@@ -224,9 +241,8 @@ void test_join_alternative_1(void) {
 
 void test_join_2(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join(strings, 5, " ");
-  printf("%s\n", result);
-  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming 2021!", result);
+  char *result = join(strings, 4, " * ");
+  TEST_ASSERT_EQUAL_STRING("Welcome * to * C * Programming", result);
   free(result); /* Freed the allocated memory in function join*/
 }
 
