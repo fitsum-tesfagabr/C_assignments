@@ -218,21 +218,21 @@ void test_join_1(void) {
 void test_join_alternative_1(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
   char *result = join_alternative(strings, 5, " - ");
-  TEST_ASSERT_EQUAL(0,
-                    strcmp("Welcome - to - C - Programming - 2021!", result));
+  TEST_ASSERT_EQUAL_STRING("Welcome - to - C - Programming - 2021!", result);
   free(result); /* Freed the allocated memory in function join_alternative*/
 }
 
 void test_join_2(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
   char *result = join(strings, 5, " ");
-  TEST_ASSERT_EQUAL(0, strcmp("Welcome to C Programming 2021!", result));
+  printf("%s\n", result);
+  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming 2021!", result);
   free(result); /* Freed the allocated memory in function join*/
 }
 
 void test_find_quoted_1(void) {
   char *s1 = find_quoted("foo \"bar baz \" \"boo");
-  TEST_ASSERT_EQUAL(0, strcmp("bar baz ", s1));
+  TEST_ASSERT_EQUAL_STRING("bar baz ", s1);
   free(s1); /* Freed the allocated memory in function find_quoted */
 }
 
