@@ -1,0 +1,3 @@
+Zeitaufwand: 5:00
+
+Die Aufgaben waren nicht schwere, Die meisten Zeit wird verbraucht für Debugging.
