@@ -79,7 +79,7 @@ char *join(char **strings, size_t num_strings, char *separator) {
    * spaces for the separator.
    */
   num_concatenated_chars += (num_strings - 1) * strlen(separator);
-
+  printf("Total len in join: %d\n", num_concatenated_chars);
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
   for (int i = 0; i < num_strings; i++) {
     strcat(buffer, strings[i]);
@@ -93,7 +93,7 @@ char *join(char **strings, size_t num_strings, char *separator) {
 }
 
 /* Where as this function concatenates the strings explicitly */
-char *join_alternative(char **strings, size_t num_strings, char *separator) {
+char *join_1(char **strings, size_t num_strings, char *separator) {
   /* num_concatenated_chars is initialized to one
    * because one space is required at the end of
    * any string to indicate end of string.
@@ -109,6 +109,7 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
    * spaces for the separator.
    */
   num_concatenated_chars += (num_strings - 1) * strlen(separator);
+  printf("Total len in join_1: %d\n", num_concatenated_chars);
 
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
 
@@ -224,29 +225,54 @@ void test_repeat_cpp_5_times(void) {
 }
 
 void test_join_1(void) {
-  char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
-  char *result = join(strings, 4, " * ");
-  TEST_ASSERT_EQUAL(
-      0, strcmp("Help! * I'm split into * multiple * strings!", result));
-  free(result); /* Freed the allocated memory in function join*/
-}
-
-void test_join_alternative_1(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join_alternative(strings, 5, " - ");
+  char *result = join(strings, 5, " - ");
+  printf("\n%lu == %lu\n", strlen("Welcome - to - C - Programming - 2021!"),
+         strlen(result));
   TEST_ASSERT_EQUAL_STRING("Welcome - to - C - Programming - 2021!", result);
   free(result); /* Freed the allocated memory in function join_alternative*/
 }
 
 void test_join_2(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join_alternative(strings, 4, " ");
+  char *result = join(strings, 4, " ");
+  printf("\n%lu == %lu\n", strlen("Welcome to C Programming"), strlen(result));
   TEST_ASSERT_EQUAL_STRING("Welcome to C Programming", result);
   free(result); /* Freed the allocated memory in function join*/
 }
 void test_join_3(void) {
   char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
-  char *result = join_alternative(strings, 4, " * ");
+  char *result = join(strings, 4, " * ");
+  printf("\n%lu == %lu\n",
+         strlen("Help! * I'm split into * multiple * strings!"),
+         strlen(result));
+  TEST_ASSERT_EQUAL(
+      0, strcmp("Help! * I'm split into * multiple * strings!", result));
+  free(result); /* Freed the allocated memory in function join*/
+}
+
+void test_join_1_1(void) {
+  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
+  char *result = join_1(strings, 5, " - ");
+  printf("\n%lu == %lu\n", strlen("Welcome - to - C - Programming - 2021!"),
+         strlen(result));
+  TEST_ASSERT_EQUAL_STRING("Welcome - to - C - Programming - 2021!", result);
+  free(result); /* Freed the allocated memory in function join_alternative*/
+}
+
+void test_join_1_2(void) {
+  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
+  char *result = join_1(strings, 4, " ");
+  printf("\n%lu == %lu\n", strlen("Welcome to C Programming"), strlen(result));
+  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming", result);
+  free(result); /* Freed the allocated memory in function join*/
+}
+void test_join_1_3(void) {
+  char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
+  char *result = join_1(strings, 4, " * ");
+  printf("\n%lu == %lu\n",
+         strlen("Help! * I'm split into * multiple * strings!"),
+         strlen(result));
   TEST_ASSERT_EQUAL(
       0, strcmp("Help! * I'm split into * multiple * strings!", result));
   free(result); /* Freed the allocated memory in function join*/
@@ -281,10 +307,13 @@ int main(void) {
   RUN_TEST(test_repeat_foo_3_times);
   RUN_TEST(test_repeat_cpp_5_times);
   RUN_TEST(test_join_1);
-  RUN_TEST(test_join_alternative_1);
   RUN_TEST(test_join_2);
   RUN_TEST(test_join_3);
 
+  RUN_TEST(test_join_1_1);
+
+  RUN_TEST(test_join_1_2);
+  RUN_TEST(test_join_1_3);
   RUN_TEST(test_find_quoted_1);
   RUN_TEST(test_find_quoted_2);
   RUN_TEST(test_find_quoted_3);
