@@ -225,8 +225,8 @@ void test_join_alternative_1(void) {
 
 void test_join_2(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join(strings, 3, " - ");
-  TEST_ASSERT_EQUAL(0, strcmp("Welcome - to - C", result));
+  char *result = join(strings, 5, " ");
+  TEST_ASSERT_EQUAL(0, strcmp("Welcome to C Programming 2021!", result));
   free(result); /* Freed the allocated memory in function join*/
 }
 
