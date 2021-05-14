@@ -63,7 +63,7 @@ char *repeat(size_t n, char *s) {
 }
 
 /* This fuction uses strcat funktion from string.h to concatinate the strings*/
-char *join(char **strings, size_t num_strings, char *separator) {
+char *join_alternative(char **strings, size_t num_strings, char *separator) {
   /* num_concatenated_chars is initialized to one
    * because one space is required at the end of
    * any string to indicate end of string.
@@ -80,7 +80,7 @@ char *join(char **strings, size_t num_strings, char *separator) {
    */
   num_concatenated_chars += (num_strings - 1) * strlen(separator);
   printf("Total len in join: %d\n", num_concatenated_chars);
-  
+
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
   buffer[0] = 0;
 
@@ -96,7 +96,7 @@ char *join(char **strings, size_t num_strings, char *separator) {
 }
 
 /* Where as this function concatenates the strings explicitly */
-char *join_1(char **strings, size_t num_strings, char *separator) {
+char *join(char **strings, size_t num_strings, char *separator) {
   /* num_concatenated_chars is initialized to one
    * because one space is required at the end of
    * any string to indicate end of string.
@@ -253,7 +253,35 @@ void test_join_3(void) {
       0, strcmp("Help! * I'm split into * multiple * strings!", result));
   free(result); /* Freed the allocated memory in function join*/
 }
-  void test_find_quoted_1(void) {
+
+void test_join_alternative_1(void) {
+  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
+  char *result = join_alternative(strings, 5, " - ");
+  printf("\n%lu == %lu\n", strlen("Welcome - to - C - Programming - 2021!"),
+         strlen(result));
+  TEST_ASSERT_EQUAL_STRING("Welcome - to - C - Programming - 2021!", result);
+  free(result); /* Freed the allocated memory in function join_alternative*/
+}
+
+void test_join_alternative_2(void) {
+  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
+  char *result = join_alternative(strings, 4, " ");
+  printf("\n%lu == %lu\n", strlen("Welcome to C Programming"), strlen(result));
+  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming", result);
+  free(result); /* Freed the allocated memory in function join*/
+}
+void test_join_alternative_3(void) {
+  char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
+  char *result = join_alternative(strings, 4, " * ");
+  printf("\n%lu == %lu\n",
+         strlen("Help! * I'm split into * multiple * strings!"),
+         strlen(result));
+  TEST_ASSERT_EQUAL(
+      0, strcmp("Help! * I'm split into * multiple * strings!", result));
+  free(result); /* Freed the allocated memory in function join*/
+}
+
+void test_find_quoted_1(void) {
   char *s1 = find_quoted("foo \"bar baz \" \"boo");
   TEST_ASSERT_EQUAL_STRING("bar baz ", s1);
   free(s1); /* Freed the allocated memory in function find_quoted */
@@ -285,10 +313,10 @@ int main(void) {
   RUN_TEST(test_join_2);
   RUN_TEST(test_join_3);
 
-  //RUN_TEST(test_join_1_1);
-  //RUN_TEST(test_join_1_2);
-  //RUN_TEST(test_join_1_3);
-  
+  RUN_TEST(test_join_alternative_1);
+  RUN_TEST(test_join_alternative_2);
+  RUN_TEST(test_join_alternative_3);
+
   RUN_TEST(test_find_quoted_1);
   RUN_TEST(test_find_quoted_2);
   RUN_TEST(test_find_quoted_3);
