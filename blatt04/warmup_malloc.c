@@ -80,7 +80,10 @@ char *join(char **strings, size_t num_strings, char *separator) {
    */
   num_concatenated_chars += (num_strings - 1) * strlen(separator);
   printf("Total len in join: %d\n", num_concatenated_chars);
+  
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
+  buffer[0] = 0;
+
   for (int i = 0; i < num_strings; i++) {
     strcat(buffer, strings[i]);
     if (i == num_strings - 1) {
@@ -250,35 +253,7 @@ void test_join_3(void) {
       0, strcmp("Help! * I'm split into * multiple * strings!", result));
   free(result); /* Freed the allocated memory in function join*/
 }
-
-void test_join_1_1(void) {
-  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join_1(strings, 5, " - ");
-  printf("\n%lu == %lu\n", strlen("Welcome - to - C - Programming - 2021!"),
-         strlen(result));
-  TEST_ASSERT_EQUAL_STRING("Welcome - to - C - Programming - 2021!", result);
-  free(result); /* Freed the allocated memory in function join_alternative*/
-}
-
-void test_join_1_2(void) {
-  char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join_1(strings, 4, " ");
-  printf("\n%lu == %lu\n", strlen("Welcome to C Programming"), strlen(result));
-  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming", result);
-  free(result); /* Freed the allocated memory in function join*/
-}
-void test_join_1_3(void) {
-  char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
-  char *result = join_1(strings, 4, " * ");
-  printf("\n%lu == %lu\n",
-         strlen("Help! * I'm split into * multiple * strings!"),
-         strlen(result));
-  TEST_ASSERT_EQUAL(
-      0, strcmp("Help! * I'm split into * multiple * strings!", result));
-  free(result); /* Freed the allocated memory in function join*/
-}
-
-void test_find_quoted_1(void) {
+  void test_find_quoted_1(void) {
   char *s1 = find_quoted("foo \"bar baz \" \"boo");
   TEST_ASSERT_EQUAL_STRING("bar baz ", s1);
   free(s1); /* Freed the allocated memory in function find_quoted */
@@ -310,10 +285,10 @@ int main(void) {
   RUN_TEST(test_join_2);
   RUN_TEST(test_join_3);
 
-  RUN_TEST(test_join_1_1);
-
-  RUN_TEST(test_join_1_2);
-  RUN_TEST(test_join_1_3);
+  //RUN_TEST(test_join_1_1);
+  //RUN_TEST(test_join_1_2);
+  //RUN_TEST(test_join_1_3);
+  
   RUN_TEST(test_find_quoted_1);
   RUN_TEST(test_find_quoted_2);
   RUN_TEST(test_find_quoted_3);
