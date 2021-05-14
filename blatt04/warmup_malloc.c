@@ -39,10 +39,10 @@ int fib_fast(int n) {
 
 char *repeat(size_t n, char *s) {
 
-  size_t buff_size = n * strlen(s) + 1;
+  unsigned int buff_size = n * strlen(s) + 1;
 
   /* The required memory size will be dynamically allocated */
-  char *buffer = (char *)malloc(buff_size * sizeof(char));
+  char *buffer = malloc(buff_size * sizeof(char));
 
   unsigned int s_position = 0; /* index of the current character in "s" */
 
@@ -53,7 +53,6 @@ char *repeat(size_t n, char *s) {
       /* the index of s will be set to first character so that it
        * can repeatedly be read from start
        * */
-      int *cache = malloc((n) * sizeof(int));
       s_position = 0;
     }
   }
