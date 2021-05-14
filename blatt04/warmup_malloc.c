@@ -113,7 +113,7 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
   char *buffer = malloc(num_concatenated_chars * sizeof(char));
 
   buffer[0] = 0; /* the aim is to set the length of buffer to 0 temporarily */
-  
+
   /*
    * i - strings index to read each string everytime
    * j - buffer index, usefull when concatinating
@@ -145,7 +145,7 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
         buffer[j + x] = separator[x];
       }
     }
-    
+
     /* It addes 0 everitime we iterate through the strings and conatenate
      * them with the separator.
      *
@@ -155,11 +155,10 @@ char *join_alternative(char **strings, size_t num_strings, char *separator) {
     if (i < num_strings - 1) {
       buffer[j + x] = 0; /* end of string indicator */
     } else {
-      buffer[j] = 0; 
+      buffer[j] = 0;
     }
   }
 
-  
   return buffer;
 }
 
