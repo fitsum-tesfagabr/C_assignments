@@ -240,9 +240,16 @@ void test_join_alternative_1(void) {
 
 void test_join_2(void) {
   char *strings[] = {"Welcome", "to", "C", "Programming", "2021!"};
-  char *result = join(strings, 4, " * ");
-  TEST_ASSERT_EQUAL_STRING("Welcome * to * C * Programming", result);
+  char *result = join(strings, 4, " ");
+  TEST_ASSERT_EQUAL_STRING("Welcome to C Programming", result);
   free(result); /* Freed the allocated memory in function join*/
+}
+void test_join_3(void) {
+	  char *strings[] = {"Help!", "I'm split into", "multiple", "strings!"};
+	    char *result = join(strings, 4, " * ");
+	      TEST_ASSERT_EQUAL(
+			            0, strcmp("Help! * I'm split into * multiple * strings!", result));
+	        free(result); /* Freed the allocated memory in function join*/
 }
 
 void test_find_quoted_1(void) {
@@ -276,6 +283,7 @@ int main(void) {
   RUN_TEST(test_join_1);
   RUN_TEST(test_join_alternative_1);
   RUN_TEST(test_join_2);
+  RUN_TEST(test_join_3);
 
   RUN_TEST(test_find_quoted_1);
   RUN_TEST(test_find_quoted_2);
