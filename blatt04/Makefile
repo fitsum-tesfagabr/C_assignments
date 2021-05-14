@@ -2,7 +2,7 @@
 
 .PHONY: compile test checkstyle format clean
 
-compile: warmup_structs.o warmup_malloc.o  ../unity/unity.o
+compile: warmup_structs warmup_malloc
 
 test: warmup_structs warmup_malloc
 	./warmup_structs
