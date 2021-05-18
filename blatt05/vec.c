@@ -28,9 +28,6 @@ size_t vec_length(Vec *xs) {
 size_t vec_capacity(Vec *xs) {
 }
 
-void vec_set_capacity(Vec *xs, size_t capacity) {
-}
-
 bool vec_push(Vec *xs, int x) {
 };
 
