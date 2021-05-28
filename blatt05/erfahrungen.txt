@@ -1,0 +1,5 @@
+Zeitaufwand: 10:00
+
+Die Aufgaben waren vertändlich und sehr hilfreich. Man kann viel
+über Speicherverwaltung lernen und üben. Obwohl die Aufgaben 
+verständlich waren, Debugging ist sehr Zeitaufwändig.

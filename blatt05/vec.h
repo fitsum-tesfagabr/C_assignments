@@ -67,4 +67,6 @@ int *vec_min_between(Vec *xs, size_t begin, size_t end);
 /* Sorts the elements of `xs` in increasing order. */
 void vec_sort(Vec *xs);
 
+/* Swap elements x and y to y and x */
+void swap_int(int *x, int *y);
 #endif /* VEC_H */
