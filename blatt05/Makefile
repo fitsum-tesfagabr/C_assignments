@@ -2,28 +2,28 @@
 
 .PHONY: compile test checkstyle format clean
 
-compile: vec.o vec_test statistics
+compile: vec_test statistics
 
 test: vec_test
 	./vec_test
 
 vec.o: vec.c vec.h
-	gcc -c vec.c -o vec.o
+	gcc -fsanitize=address -g -c vec.c -o vec.o
 
 vec_test: vec.o vec_test.o ../unity/unity.o vec.h
-	gcc vec_test.o vec.o ../unity/unity.o -o vec_test
+	gcc -fsanitize=address -g vec_test.o vec.o ../unity/unity.o -o vec_test
 
 vec_test.o: vec_test.c vec.h
-	gcc -c vec_test.c -o vec_test.o
+	gcc -fsanitize=address -g -c vec_test.c -o vec_test.o
 
 ../unity/unity.o: ../unity/unity.c
-	gcc -c ../unity/unity.c -o ../unity/unity.o
+	gcc -fsanitize=address -g -c ../unity/unity.c -o ../unity/unity.o
 
 statistics: statistics.o vec.o vec.h
-	gcc statistics.o vec.o -o statistics
+	gcc -fsanitize=address -g statistics.o vec.o -o statistics
 
 statistics.o: statistics.c vec.h
-	gcc -c statistics.c -o statistics.o
+	gcc -fsanitize=address -g -c statistics.c -o statistics.o
 checkstyle:
 		clang-tidy --quiet *.c *.h --
 
