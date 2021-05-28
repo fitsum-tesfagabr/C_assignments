@@ -1,6 +1,8 @@
 # -*- Makefile -*-
 
-.PHONY: compile test checkstyle format clean
+.PHONY: compile test checkstyle format clean all
+
+all: compile checkstyle format test
 
 compile: vec_test statistics
 

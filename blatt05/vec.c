@@ -104,10 +104,10 @@ int *vec_min_between(Vec *xs, size_t from, size_t to) {
   if (xs == NULL) {
     return NULL;
   }
-  /* Normally range is expected to be from left to right */
-  if (from < to) {
+  /* Normally range is expected to be from left to right and must be >= 0 */
+  if (from < to && from >= 0) {
     /* the right index must be in range*/
-    if (to >= vec_length(xs)) {
+    if (to > vec_length(xs)) {
       return NULL;
     }
 
@@ -118,9 +118,9 @@ int *vec_min_between(Vec *xs, size_t from, size_t to) {
 
     size_t min_location = from; /* index of smallest element */
 
-    for (int i = from; i < to; i++) {
+    for (int i = from; i < to - 1; i++) {
 
-      for (int j = i + 1; j <= to; j++) {
+      for (int j = i + 1; j < to; j++) {
         /* if the i'th element is greater than the next
          * element in the array, it need not be compared
          * with other elements. Therefore, the loop will
@@ -157,8 +157,8 @@ void vec_sort(Vec *xs) {
      * with the left most index. The left index will then be shifted to the
      * right after every iteration.
      */
-    for (int i = 0; i < ((int)vec_length(xs) - 1); i++) {
-      swap_int(xs->data + i, vec_min_between(xs, i, vec_length(xs) - 1));
+    for (int i = 0; i < ((int)vec_length(xs) - 2); i++) {
+      swap_int(xs->data + i, vec_min_between(xs, i, vec_length(xs)));
     }
   }
 }

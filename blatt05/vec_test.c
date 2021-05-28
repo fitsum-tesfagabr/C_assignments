@@ -142,9 +142,9 @@ void test_vec_min_between(void) {
   /* Return smalles element for the give range if valid, else return
    * value is NULL
    */
-  TEST_ASSERT_EQUAL_INT(-5, *vec_min_between(xs, 0, 5));
-  TEST_ASSERT_EQUAL_INT(-1, *vec_min_between(xs, 2, 5));
-  TEST_ASSERT_EQUAL_INT(0, *vec_min_between(xs, 2, 4));
+  TEST_ASSERT_EQUAL_INT(-5, *vec_min_between(xs, 0, 6));
+  TEST_ASSERT_EQUAL_INT(0, *vec_min_between(xs, 2, 5));
+  TEST_ASSERT_EQUAL_INT(-1, *vec_min_between(xs, 2, 6));
 
   TEST_ASSERT_EQUAL_PTR(NULL, vec_min_between(xs, -2, 4)); /* -2 is invalid */
   TEST_ASSERT_EQUAL_PTR(NULL, vec_min_between(xs, 4, 2));  /* from > to */
