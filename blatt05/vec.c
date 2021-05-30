@@ -126,13 +126,13 @@ int *vec_min_between(Vec *xs, size_t from, size_t to) {
          * with other elements. Therefore, the loop will
          * be break and the 'i + 1' will be checked again.*/
         if (xs->data[i] > xs->data[j]) {
-          min_location = j;
+          min_location = j; /* j'th element is smaller than i'th element */
           break;
         }
         /* after the element is compared with all the remaining
          * elements in the range and is smaller than all the
-         * elements, the index of the min_element will be swapped
-         * and the function terminates. */
+         * elements, no other operations are needed.
+         * Therefore, the function terminates. */
         if (j == (to - 1)) {
           complete = true;
         }
@@ -142,7 +142,7 @@ int *vec_min_between(Vec *xs, size_t from, size_t to) {
         break;
       }
     } // end of external for loop
-    /* swap the element to the first location after evaluaton */
+    /* Location of the minimum element will be returned */
     return xs->data + min_location;
   }
   /* if 'from' is greater than 'to' it is confusing, therefore,
@@ -157,7 +157,7 @@ void vec_sort(Vec *xs) {
      * with the left most index. The left index will then be shifted to the
      * right after every iteration.
      */
-    for (int i = 0; i < ((int)vec_length(xs) - 2); i++) {
+    for (int i = 0; i < (vec_length(xs) - 1); i++) {
       swap_int(xs->data + i, vec_min_between(xs, i, vec_length(xs)));
     }
   }
@@ -167,8 +167,8 @@ void vec_sort(Vec *xs) {
 void vec_print(Vec *xs) {
   if (xs != NULL) {
     // vec_sort(xs);
-    printf("\nVector at address %p has %ld elements and capacity %ld.\n",
-           xs->data, xs->length, xs->capacity);
+    printf("\nVector at address %p has %ld elements and capacity %ld.\n", xs,
+           xs->length, xs->capacity);
     for (int i = 0; i < vec_length(xs); i++) {
       printf("  vec[%d] = %d (address %p)\n", i, xs->data[i], xs->data + i);
     }
