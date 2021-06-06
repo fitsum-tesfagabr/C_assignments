@@ -65,10 +65,11 @@ Matrix* matrix_new(size_t width, size_t height, Cell* def) {
           (m->cells + index_x_y)->background_color = def->background_color;
         }
       }
-      return m;
+      return m; /* Return Matrix */
     }
+    return NULL; /* if m->cells is NULL*/
   }
-  return NULL;
+  return NULL; /* if m is NULL */
 }
 
 void matrix_free(Matrix* m) {
@@ -180,6 +181,7 @@ void matrix_resize(Matrix* m, size_t width, size_t height, Cell* def) {
   }
 }
 
+/* Fills only the newly created cells in the rows */
 void fill_matrix_width(Matrix* m, size_t w_diff, Cell* def) {
   size_t start = matrix_width(m) - w_diff;
   size_t end = matrix_width(m);
@@ -195,6 +197,7 @@ void fill_matrix_width(Matrix* m, size_t w_diff, Cell* def) {
   }
 }
 
+/* Fills only the newly created cells in the columns */
 void fill_matrix_height(Matrix* m, size_t h_diff, Cell* def) {
 
   size_t start = matrix_height(m) - h_diff;
@@ -224,40 +227,63 @@ bool cell_eq(Cell* c1, Cell* c2) {
 }
 
 void matrix_print_update(Matrix* old, Matrix* new) {
-  printf(CURSOR_HIDE);
-  for (int j = 0; j < matrix_height(new); j++) {
-    for (int i = 0; i < matrix_width(new); i++) {
+  /* The cursor should stay hidden until the screen is updated.
+   * Because it blinks and makes the screen disturbing.
+   * It will be showed first when all the cells are updated.
+   * */
+  if (old != NULL && new != NULL) {
 
-      index_x_y = ((i + j) * (i + j + 1)) / 2 + j;
-      move_cursor_to(j, i);
+    printf(CURSOR_HIDE);
+    for (int j = 0; j < matrix_height(new); j++) {
+      for (int i = 0; i < matrix_width(new); i++) {
 
-      if (!cell_eq(old->cells + index_x_y, new->cells + index_x_y)) {
+        index_x_y = ((i + j) * (i + j + 1)) / 2 + j;
+        /* The cursor moves row by row after the current row is completed
+         * updating
+         */
+        move_cursor_to(j, i);
 
-        printf("%s%s%c", (new->cells + index_x_y)->text_color,
-               (new->cells + index_x_y)->background_color,
-               (new->cells + index_x_y)->content);
-        (old->cells + index_x_y)->content = (new->cells + index_x_y)->content;
-        (old->cells + index_x_y)->text_color =
-            (new->cells + index_x_y)->text_color;
-        (old->cells + index_x_y)->background_color =
-            (new->cells + index_x_y)->background_color;
-      }
-    }
+        /* Cells are updated only when the new once are different. */
+        if (!cell_eq(old->cells + index_x_y, new->cells + index_x_y)) {
+
+          printf("%s%s%c", (new->cells + index_x_y)->text_color,
+                 (new->cells + index_x_y)->background_color,
+                 (new->cells + index_x_y)->content);
+          /* After the cell is renewed the old Matrix will be updated with the
+           * new once
+           */
+          (old->cells + index_x_y)->content = (new->cells + index_x_y)->content;
+          (old->cells + index_x_y)->text_color =
+              (new->cells + index_x_y)->text_color;
+          (old->cells + index_x_y)->background_color =
+              (new->cells + index_x_y)->background_color;
+        } // end of if
+      }   // end of for loop
+    }     // end of for loop
+
+    /* When all the cells are updated, the cursor will be moved to the
+     * right-bottom edge
+     */
+    move_cursor_to(matrix_height(new) - 1, matrix_width(new) - 1);
+    printf(CURSOR_SHOW);
+    fflush(stdout);
   }
-  move_cursor_to(matrix_height(new) - 1, matrix_width(new) - 1);
-  printf(CURSOR_SHOW);
-  fflush(stdout);
 }
 
 void matrix_set_str_at(Matrix* m, size_t x, size_t y, const char* s,
                        const char* text_color, const char* background_color) {
   size_t range = strlen(s);
+  /* if the string does not fit on the screen, the range will be till the
+   * end of the screen starting from x
+   */
   if ((strlen(s) + x) > matrix_width(m)) {
     range = matrix_width(m) - x + 1;
   }
+
+  /* If x and y are out of screen range, nothing happens */
   if (x <= matrix_width(m) && y <= matrix_height(m)) {
     size_t j;
-
+    /* The cells will be updated step by step. */
     for (int i = 0; i < range; i++) {
       j = x + i;
       assert(s[i] != '\n');

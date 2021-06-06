@@ -16,7 +16,7 @@ int main(void) {
     Size2 size = tui_size();
 
     tui_clear();
-
+    /* Upgraded */
     Cell* cell = tui_cell_at(1 + ((t + size.x - 2) % (size.x)), size.y / 2);
     cell->content = c;
     cell->text_color = FG_RED;
