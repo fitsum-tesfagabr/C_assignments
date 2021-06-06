@@ -2,7 +2,7 @@
 #define TUI_IO_H
 
 #include <stdbool.h>
-
+#include <stddef.h>
 /* Set the terminal to raw mode.
  *
  * Normally, the terminal uses line buffering, i.e. it waits for the user to

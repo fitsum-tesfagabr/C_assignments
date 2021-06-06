@@ -3,9 +3,9 @@
 
 #include <stdio.h>
 
+#include "./ansi_codes.h"
 #include "./tui_io.h"
 #include "./tui_matrix.h"
-#include "./ansi_codes.h"
 
 /* Configure the terminal for interactive use.
  *
@@ -42,13 +42,15 @@ void tui_set_str_at(size_t x, size_t y, const char* s, const char* text_color,
 /* Query the current terminal size and resize the matrices if necessary. */
 Size2 tui_size(void);
 
-/* Print changes done with `tui_cell_at` and `tui_set_str_at` to the terminal. */
+/* Print changes done with `tui_cell_at` and `tui_set_str_at` to the terminal.
+ */
 void tui_update(void);
 
 /* Set all cells to be equal to `c`. */
 void tui_clear_with(Cell* c);
 
-/* Set all cells be the space character with black background and white text color. */
+/* Set all cells be the space character with black background and white text
+ * color. */
 void tui_clear(void);
 
 #endif /* TUI_H */

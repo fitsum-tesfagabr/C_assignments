@@ -13,5 +13,5 @@
 #define CURSOR_TO(row, col) "\e[" row ";" col "f"
 
 void move_cursor_to(size_t x, size_t y) {
-  printf(CURSOR_TO("%ld", "%ld"), y + 1, x + 1);
+  printf(CURSOR_TO("%ld", "%ld"), x + 1, y + 1);
 }

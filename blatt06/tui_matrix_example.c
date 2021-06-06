@@ -6,11 +6,10 @@
 
 int main(void) {
   Cell def_cell = (Cell){
-    .content = '.', .text_color = FG_WHITE, .background_color = BG_BLACK};
+      .content = '.', .text_color = FG_WHITE, .background_color = BG_BLACK};
 
-  Matrix* old = matrix_new(10,10,&def_cell);
-  Matrix* new = matrix_new(10,10,&def_cell);
-
+  Matrix* old = matrix_new(10, 10, &def_cell);
+  Matrix* new = matrix_new(10, 10, &def_cell);
 
   /* TEST 1: Should show ten empty lines, because old and new are equal.
    * The cursor should be visible at row 10 column 10.
@@ -18,9 +17,9 @@ int main(void) {
   printf(CLEAR_SCREEN);
   matrix_print_update(old, new);
 
-  /* Wait for the user to press enter, so we have time to look at the terminal. */
+  /* Wait for the user to press enter, so we have time to look at the terminal.
+   */
   getchar();
-
 
   /* TEST 2: Should print only the three characters with the corresponding
    * colors and at the corresponding rows and columns.
@@ -40,16 +39,16 @@ int main(void) {
 
   matrix_print_update(old, new);
 
-  /* Wait for the user to press enter, so we have time to look at the terminal. */
+  /* Wait for the user to press enter, so we have time to look at the terminal.
+   */
   getchar();
-
 
   /* TEST 3: Should print nothing new, because old and new are equal. */
   matrix_print_update(old, new);
 
-  /* Wait for the user to press enter, so we have time to look at the terminal. */
+  /* Wait for the user to press enter, so we have time to look at the terminal.
+   */
   getchar();
-
 
   matrix_free(new);
   matrix_free(old);

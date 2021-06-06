@@ -1,0 +1,4 @@
+Zeitaufwand: 48:00
+
+All is well that ends well!. It was really confusing and hard to trace the
+errors. But the end result matters.

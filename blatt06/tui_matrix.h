@@ -1,6 +1,7 @@
 #ifndef TUI_INTERNAL_H
 #define TUI_INTERNAL_H
-
+#include <stdbool.h>
+#include <stddef.h>
 /* Representation of a terminal cell at a certain (x,y) position. */
 typedef struct Cell {
   char content;           /* The character at this position */
@@ -23,7 +24,8 @@ void matrix_free(Matrix* m);
 /* Set all cells of `m` to be equal to `c`. */
 void matrix_clear_with(Matrix* m, Cell* c);
 
-/* Set all cells of `m` to be the space character with black background and white text color. */
+/* Set all cells of `m` to be the space character with black background and
+ * white text color. */
 void matrix_clear(Matrix* m);
 
 /* Returns the width of the matrix. */
@@ -55,7 +57,8 @@ void matrix_set_str_at(Matrix* m, size_t x, size_t y, const char* s,
  */
 void matrix_resize(Matrix* m, size_t width, size_t height, Cell* def);
 
-/* For each cell in `new`, which is different from the corresponding cell in `old`:
+/* For each cell in `new`, which is different from the corresponding cell in
+ * `old`:
  *
  * - print the cell from `new` with the correct color at the correct position;
  *
@@ -65,9 +68,14 @@ void matrix_resize(Matrix* m, size_t width, size_t height, Cell* def);
  * After the cells are redrawn and updated, the cursor position is moved to the
  * last column of the last row and stdout is flushed.
  *
- * Note: It does *not* make sense to use any linebreak like '\n' in the definition
- * of this function.
+ * Note: It does *not* make sense to use any linebreak like '\n' in the
+ * definition of this function.
  */
 void matrix_print_update(Matrix* old, Matrix* new);
+
+/* Helper functions for matrix_resize */
+bool cell_eq(Cell* c1, Cell* c2);
+void fill_matrix_height(Matrix* m, size_t h_diff, Cell* def);
+void fill_matrix_width(Matrix* m, size_t w_diff, Cell* def);
 
 #endif /* TUI_INTERNAL_H */
