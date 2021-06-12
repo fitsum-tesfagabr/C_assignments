@@ -1,10 +1,10 @@
-#include "../tui/tui.h"
-#include "./game_lib.h"
-#include "./vec.h"
-#include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
+
+#include "../tui/tui.h"
+#include "./game_lib.h"
+#include "./vec.h"
 int main(void) {
   tui_init();
 
@@ -59,7 +59,7 @@ int main(void) {
       .time_step = 0,
   };
 
-  while (true) {
+  while (1) {
     /* Handle Keyboard Input */
 
     if (stdin_has_changed()) {
