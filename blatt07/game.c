@@ -1,11 +1,10 @@
-#include <stdlib.h>
-#include <time.h>
-#include <unistd.h>
-#include <stdbool.h>
 #include "../tui/tui.h"
 #include "./game_lib.h"
 #include "./vec.h"
-
+#include <stdbool.h>
+#include <stdlib.h>
+#include <time.h>
+#include <unistd.h>
 int main(void) {
   tui_init();
 
