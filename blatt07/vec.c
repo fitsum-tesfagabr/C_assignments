@@ -78,6 +78,7 @@ void vec_pop(Vec* xs) {
 void vec_remove(Vec* xs, size_t i) {
   void* x = *vec_at(xs, i);
   free(x);
+
   xs->length--;
   for (size_t j = i; j < xs->length; ++j) {
     *vec_at(xs, j) = *vec_at(xs, j + 1);

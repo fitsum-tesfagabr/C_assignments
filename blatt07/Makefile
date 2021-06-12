@@ -6,6 +6,8 @@ CFLAGS= -fsanitize=address -g -Wall
 
 compile: game
 
+refresh: compile clean
+
 test: game_test
 	./game_test
 
