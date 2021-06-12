@@ -1,0 +1,5 @@
+Zeitaufwand: 7:00
+
+Solche Aufgaben sind sehr zu empfehlen. Man kann alle theoretischen
+Kenntnisse in der Tat umsetzen und das Ergebniss Visual beobachten.
+Debbuging ist aber sehr aufwändig.
