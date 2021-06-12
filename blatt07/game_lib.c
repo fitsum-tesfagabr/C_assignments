@@ -9,8 +9,7 @@
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
 void draw_info_bar(GameState* gs) {
   char buf[255];
-  sprintf(buf,
-          "LIFES: %d    POINTS: %d    DISTANCE: %d    POWERUP: %d",
+  sprintf(buf, "LIFES: %d    POINTS: %d    DISTANCE: %d    POWERUP: %d",
           gs->ship.health, gs->points, gs->time_step, gs->ship.powerup_time);
   tui_set_str_at(0, gs->term_size.y - 1, buf, FG_WHITE, BG_BLACK);
 }
@@ -273,14 +272,14 @@ bool handle_input(GameState* gs, char c) {
         break;
       }
       Int2* proj = malloc(sizeof(Int2));
-      if (proj == NULL){
+      if (proj == NULL) {
         exit(1);
       }
       *proj = (Int2){.x = gs->ship.pos.x + 5 + bull_x,
                      .y = gs->ship.pos.y + bull_y};
       vec_push(gs->projectiles, proj);
     } // end of inner for
-  } // end of outer for
+  }   // end of outer for
   return false;
 } // end of function hand_input
 
@@ -328,7 +327,7 @@ void move_asteroids(GameState* gs) {
       } // end of if
       ++i;
     } // end of while loop
-  } // end of time_step comparison
+  }   // end of time_step comparison
 } // end of function move_asteroids
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -367,9 +366,9 @@ void spawn_asteroids(GameState* gs) {
   if (gs->time_step % 5 == 0) {
 
     Int2* astr = malloc(sizeof(Int2));
-      if (astr == NULL){
-        exit(1);
-      }
+    if (astr == NULL) {
+      exit(1);
+    }
     *astr =
         (Int2){.x = gs->field_end.x - 2, .y = rand() % (gs->field_end.y - 1)};
     vec_push(gs->asteroids, astr);
@@ -382,9 +381,9 @@ void spawn_powerups(GameState* gs) {
   int t = 200 + rand() % (600);
   if ((gs->time_step + 1) % t == 0) {
     Int2* pwr_ups = malloc(sizeof(Int2));
-      if (pwr_ups == NULL){
-        exit(1);
-      }
+    if (pwr_ups == NULL) {
+      exit(1);
+    }
     *pwr_ups = (Int2){.x = gs->field_end.x - 2,
                       .y = 1 + rand() % (gs->field_end.y - 3)};
     vec_push(gs->powerups, pwr_ups);
