@@ -379,8 +379,8 @@ void spawn_asteroids(GameState* gs) {
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
 void spawn_powerups(GameState* gs) {
   /* Powerups are created every fifty time steps */
-  /* In every 200 Asteroids is one power up created */
-  if ((gs->time_step + 1) % 1000 == 0) {
+  int t = 200 + rand() % (600);
+  if ((gs->time_step + 1) % t == 0) {
     Int2* pwr_ups = malloc(sizeof(Int2));
       if (pwr_ups == NULL){
         exit(1);
