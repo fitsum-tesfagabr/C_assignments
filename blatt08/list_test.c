@@ -2,8 +2,10 @@
 
 #include "./list.h"
 
-void setUp(void) {}
-void tearDown(void) {}
+void setUp(void) {
+}
+void tearDown(void) {
+}
 
 void test_new_free(void) {
   List* l = list_new();
@@ -19,7 +21,8 @@ void test_push_pop_back(void) {
   int i2 = 20;
   int i3 = 30;
 
-  /* Create the list, push i1, i2, and i3, and check that list length is increased. */
+  /* Create the list, push i1, i2, and i3, and check that list length is
+   * increased. */
   List* l = list_new();
   TEST_ASSERT_EQUAL_INT(0, list_len(l));
 
@@ -88,14 +91,16 @@ void test_push_pop_back(void) {
   list_free(l);
 }
 
-/* Same as the previous test, but pushes/pops the elements at the front of the list. */
+/* Same as the previous test, but pushes/pops the elements at the front of the
+ * list. */
 void test_push_pop_front(void) {
   /* Some numbers whose addresses we're going to push in the list. */
   int i1 = 10;
   int i2 = 20;
   int i3 = 30;
 
-  /* Create the list, push i1, i2, and i3, and check that list length is increased. */
+  /* Create the list, push i1, i2, and i3, and check that list length is
+   * increased. */
   List* l = list_new();
   TEST_ASSERT_EQUAL_INT(0, list_len(l));
 

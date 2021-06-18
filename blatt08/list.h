@@ -46,4 +46,7 @@ Node* node_prev(Node* n);
 /* Return a pointer to the int value stored in node `n`. */
 int* node_val(Node* n);
 
+/* Return element at a specific index */
+Node* node_at(List* l, size_t n);
+
 #endif /* LIST_H */
