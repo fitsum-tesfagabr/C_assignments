@@ -4,8 +4,8 @@
 #include "./json_data.h"
 #include "./json_printer.h"
 #include "./json_reader.h"
-#include "./reader.h"
 #include "./memtools.h"
+#include "./reader.h"
 void setUp(void) {
 }
 void tearDown(void) {
@@ -40,7 +40,7 @@ void test_highscore_to_json(void) {
   }
 }
 void test_json_to_highscores(void) {
-  
+
   /* Four sample Scores are saved as a json value
    * representation. The JsonValue will then be
    * converted to Highscore in the function
@@ -72,14 +72,14 @@ void test_json_to_highscores(void) {
   JsonValue* jval2 = highscore_to_json(&highscore2);
   JsonValue* jval3 = highscore_to_json(&highscore3);
   JsonValue* jval4 = highscore_to_json(&highscore4);
-  
+
   Vec* mems = vec_new();
   /* Each Highscore info is represented as a unique member with its rank */
   JsonMember* mem1 = json_member_new(strcpy_malloc("0"), jval1); /* #1 */
   JsonMember* mem2 = json_member_new(strcpy_malloc("1"), jval2); /* #2 */
   JsonMember* mem3 = json_member_new(strcpy_malloc("2"), jval3); /* #3 */
   JsonMember* mem4 = json_member_new(strcpy_malloc("3"), jval4); /* #4 */
-  
+
   vec_push(mems, mem1);
   vec_push(mems, mem2);
   vec_push(mems, mem3);
@@ -90,19 +90,19 @@ void test_json_to_highscores(void) {
 
   /* Represent the object of members as a value */
   JsonValue* val = json_value_new_object(jobj);
-  
+
   /* This is a short demonistration how the memebers are saved in the json
-   * format 
+   * format
    */
   json_fprint_object(stdout, 0, jobj);
-  
+
   /***************************TEST***************************************/
   /* Test if the function json_to_highscores return the Highscrores collected in
    * vec */
   Vec* mem_r = json_to_highscores(val);
   /* The total Scores are four */
   TEST_ASSERT_EQUAL_size_t(4, vec_length(mem_r));
-  
+
   /* Top scorer is "bar" */
   Highscore* h = *vec_at(mem_r, 0);
   TEST_ASSERT_EQUAL_STRING("bar", h->name);
@@ -112,22 +112,23 @@ void test_json_to_highscores(void) {
   /* Third top scorer distance = 1308 */
   h = *vec_at(mem_r, 2);
   TEST_ASSERT_EQUAL_INT(1308, h->distance);
-  /* The fourth top scorer is "AAA" with total points = 22 and distance = 1889 */
+  /* The fourth top scorer is "AAA" with total points = 22 and distance = 1889
+   */
   h = *vec_at(mem_r, 3);
   TEST_ASSERT_EQUAL_STRING("AAA", h->name);
   TEST_ASSERT_EQUAL_INT(22, h->points);
   TEST_ASSERT_EQUAL_INT(1889, h->distance);
 
   printf("\n");
-  
+
   /* Free all the allocated memories */
   if (val != NULL) {
     json_value_free(val);
   }
-  if (mem_r != NULL){
-    for(int i = 0; i < vec_length(mem_r); i++){
+  if (mem_r != NULL) {
+    for (int i = 0; i < vec_length(mem_r); i++) {
       h = *vec_at(mem_r, i);
-      free(h->name); 
+      free(h->name);
       free(*vec_at(mem_r, i));
     }
     vec_free(mem_r);

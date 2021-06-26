@@ -8,7 +8,7 @@
 
 /* read an entire text file into memory */
 char* readfile(FILE* file) {
- 
+
   char* buffer = malloc(1);
   buffer[0] = 0;
   size_t round = 0;
@@ -21,7 +21,7 @@ char* readfile(FILE* file) {
       round++;
     }
   }
- 
+
   return buffer;
 }
 
