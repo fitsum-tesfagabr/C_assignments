@@ -1,8 +1,8 @@
 #ifndef GAME_HIGHSCORES_H
 #define GAME_HIGHSCORES_H
 
-#include "./json_data.h"
 #include "./game_lib.h"
+#include "./json_data.h"
 
 typedef struct Highscore {
   char* name;

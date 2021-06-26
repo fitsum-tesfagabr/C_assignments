@@ -1,5 +1,5 @@
-#include <stdlib.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "../tui/tui.h"
 
@@ -48,7 +48,9 @@ Cell* field_cell_at(GameState* gs, int x, int y) {
    */
   if (!is_field_coordinate(gs, x, y)) {
     tui_shutdown();
-    printf(FG_RED "ASSERTION FAILED: Coordinate (%d, %d) is not a valid game field coordinate.\n\n" COLOR_RESET, x, y);
+    printf(FG_RED "ASSERTION FAILED: Coordinate (%d, %d) is not a valid game "
+                  "field coordinate.\n\n" COLOR_RESET,
+           x, y);
     fflush(stdout);
     int* null = NULL;
     *null = 42;
@@ -101,7 +103,7 @@ void draw_projectiles(GameState* gs) {
 
 void draw_asteroids(GameState* gs) {
   Cell c = (Cell){
-    .content = ' ', .text_color = FG_WHITE, .background_color = BG_WHITE};
+      .content = ' ', .text_color = FG_WHITE, .background_color = BG_WHITE};
   for (size_t i = 0; i < vec_length(gs->asteroids); ++i) {
     Int2* asteroid = *vec_at(gs->asteroids, i);
     *field_cell_at(gs, asteroid->x, asteroid->y) = c;
@@ -110,7 +112,7 @@ void draw_asteroids(GameState* gs) {
 
 void draw_powerups(GameState* gs) {
   Cell c = (Cell){
-    .content = '@', .text_color = FG_GREEN, .background_color = BG_BLACK};
+      .content = '@', .text_color = FG_GREEN, .background_color = BG_BLACK};
   for (size_t i = 0; i < vec_length(gs->powerups); ++i) {
     Int2* powerup = *vec_at(gs->powerups, i);
     *field_cell_at(gs, powerup->x, powerup->y) = c;
@@ -119,7 +121,7 @@ void draw_powerups(GameState* gs) {
 
 void draw_explosions(GameState* gs) {
   Cell c = (Cell){
-    .content = '#', .text_color = FG_YELLOW, .background_color = BG_RED};
+      .content = '#', .text_color = FG_YELLOW, .background_color = BG_RED};
   for (size_t i = 0; i < vec_length(gs->explosions); ++i) {
     Explosion* e = *vec_at(gs->explosions, i);
     Int2 pos1 = {e->pos.x + e->age * 2, e->pos.y};
@@ -190,7 +192,8 @@ bool handle_input(GameState* gs, char c) {
 }
 
 bool collides_with_ship(Int2 ship_pos, Int2 pos) {
-  if (ship_pos.x + 2 == pos.x && ship_pos.y - 1 <= pos.y && pos.y <= ship_pos.y + 1)
+  if (ship_pos.x + 2 == pos.x && ship_pos.y - 1 <= pos.y &&
+      pos.y <= ship_pos.y + 1)
     return true;
   if (ship_pos.x + 3 == pos.x && ship_pos.y == pos.y)
     return true;

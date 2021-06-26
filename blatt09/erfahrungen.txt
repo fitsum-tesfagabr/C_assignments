@@ -1,0 +1,5 @@
+Zeitaufwand: 11:00
+
+Die Komplexität der Übung führt leicht zu Fehlern. es macht es schwierig, die
+Fehler zu verwalten. Aus diesem Grund wurde die meiste Zeit verschwendet, 
+um die Fehler zu beheben.

@@ -1,5 +1,5 @@
-#include <stdio.h>
 #include "./json_printer.h"
+#include <stdio.h>
 
 void fprint_indent(FILE* f, int indent) {
   for (int i = 0; i < indent; ++i) {
@@ -33,14 +33,14 @@ void json_fprint_object(FILE* f, int indent, JsonObject* o) {
 
 void json_fprint_value(FILE* f, int indent, JsonValue* v) {
   switch (json_value_type(v)) {
-    case JSON_NUMBER:
-      fprintf(f, "%d", json_value_as_number(v));
-      break;
-    case JSON_STRING:
-      fprintf(f, "\"%s\"", json_value_as_string(v));
-      break;
-    case JSON_OBJECT:
-      json_fprint_object(f, indent, json_value_as_object(v));
-      break;
+  case JSON_NUMBER:
+    fprintf(f, "%d", json_value_as_number(v));
+    break;
+  case JSON_STRING:
+    fprintf(f, "\"%s\"", json_value_as_string(v));
+    break;
+  case JSON_OBJECT:
+    json_fprint_object(f, indent, json_value_as_object(v));
+    break;
   }
 }

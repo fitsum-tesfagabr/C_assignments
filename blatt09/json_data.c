@@ -6,8 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./memtools.h"
 #include "./json_data.h"
+#include "./memtools.h"
 
 // Data Structures /////////////////////////////////////////////////////////////
 
@@ -63,7 +63,7 @@ void json_object_free(JsonObject* o) {
 // JsonMember //////////////////////////////////////////////////////////////////
 
 // assume that name and value are safe to share
-JsonMember* json_member_new(char * name, JsonValue* value) {
+JsonMember* json_member_new(char* name, JsonValue* value) {
   JsonMember* m = malloc_or_exit(sizeof(JsonMember));
   m->name = name;
   m->value = value;
@@ -109,14 +109,14 @@ JsonValue* json_value_new_object(JsonObject* o) {
 
 void json_value_free(JsonValue* v) {
   switch (v->type) {
-    case JSON_NUMBER:
-      break;
-    case JSON_STRING:
-      free(v->value.as_string);
-      break;
-    case JSON_OBJECT:
-      json_object_free(v->value.as_object);
-      break;
+  case JSON_NUMBER:
+    break;
+  case JSON_STRING:
+    free(v->value.as_string);
+    break;
+  case JSON_OBJECT:
+    json_object_free(v->value.as_object);
+    break;
   }
   free(v);
 }

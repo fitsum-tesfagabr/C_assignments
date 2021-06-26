@@ -1,24 +1,30 @@
 #include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
 #include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "../tui/tui.h"
-#include "./vec.h"
-#include "./game_lib.h"
 #include "./game_highscores.h"
+#include "./game_lib.h"
 #include "./memtools.h"
+#include "./vec.h"
 
 const char* logo[] = {
-"      __        ________  ___________  _______   _______     ______    __     ________    ________ ",
-"     /\"\"\\      /\"       )(\"     _   \")/\"     \"| /\"      \\   /    \" \\  |\" \\   |\"      \"\\  /\"       )",
-"    /    \\    (:   \\___/  )__/  \\\\__/(: ______)|:        | // ____  \\ ||  |  (.  ___  :)(:   \\___/ ",
-"   /' /\\  \\    \\___  \\       \\\\_ /    \\/    |  |_____/   )/  /    ) :)|:  |  |: \\   ) || \\___  \\   ",
-"  //  __'  \\    __/  \\\\      |.  |    // ___)_  //      /(: (____/ // |.  |  (| (___\\ ||  __/  \\\\  ",
-" /   /  \\\\  \\  /\" \\   :)     \\:  |   (:      \"||:  __   \\ \\        /  /\\  |\\ |:       :) /\" \\   :) ",
-"(___/    \\___)(_______/       \\__|    \\_______)|__|  \\___) \\\"_____/  (__\\_|_)(________/ (_______/  ",
-  NULL
-};
+    "      __        ________  ___________  _______   _______     ______    __ "
+    "    ________    ________ ",
+    "     /\"\"\\      /\"       )(\"     _   \")/\"     \"| /\"      \\   /   "
+    " \" \\  |\" \\   |\"      \"\\  /\"       )",
+    "    /    \\    (:   \\___/  )__/  \\\\__/(: ______)|:        | // ____  "
+    "\\ ||  |  (.  ___  :)(:   \\___/ ",
+    "   /' /\\  \\    \\___  \\       \\\\_ /    \\/    |  |_____/   )/  /    "
+    ") :)|:  |  |: \\   ) || \\___  \\   ",
+    "  //  __'  \\    __/  \\\\      |.  |    // ___)_  //      /(: (____/ // "
+    "|.  |  (| (___\\ ||  __/  \\\\  ",
+    " /   /  \\\\  \\  /\" \\   :)     \\:  |   (:      \"||:  __   \\ \\      "
+    "  /  /\\  |\\ |:       :) /\" \\   :) ",
+    "(___/    \\___)(_______/       \\__|    \\_______)|__|  \\___) \\\"_____/ "
+    " (__\\_|_)(________/ (_______/  ",
+    NULL};
 
 Int2 get_logo_size(void) {
   Int2 size = {0, 0};
@@ -48,27 +54,30 @@ GameState* new_game_state(Size2 term_size) {
   Int2 field_size = {field_end.x - field_begin.x, field_end.y - field_begin.y};
 
   /* Initialize the game state, which you have to manipulate in the functions
-   * from game_lib.c. The GameState-struct is defined and documented in game_lib.h. */
+   * from game_lib.c. The GameState-struct is defined and documented in
+   * game_lib.h. */
   GameState* game_state = malloc(sizeof(GameState));
   if (game_state == NULL) {
     return NULL;
   }
-  *game_state = (GameState) {
-    .term_size = {term_size.x, term_size.y}, /* Convert Size2 to Int2. */
-    .field_begin = field_begin,
-    .field_end = field_end,
-    .field_size = field_size,
-    .ship = {
-      .pos = {1, field_size.y / 2}, /* At the beginning, the ship is positioned */
-      .health = 3,                  /* left to the center of the game field. */
-      .powerup_time = 0,
-    },
-    .points = 0,
-    .projectiles = vec_new(),
-    .asteroids = vec_new(),
-    .powerups = vec_new(),
-    .explosions = vec_new(),
-    .time_step = 0,
+  *game_state = (GameState){
+      .term_size = {term_size.x, term_size.y}, /* Convert Size2 to Int2. */
+      .field_begin = field_begin,
+      .field_end = field_end,
+      .field_size = field_size,
+      .ship =
+          {
+              .pos = {1, field_size.y /
+                             2}, /* At the beginning, the ship is positioned */
+              .health = 3,       /* left to the center of the game field. */
+              .powerup_time = 0,
+          },
+      .points = 0,
+      .projectiles = vec_new(),
+      .asteroids = vec_new(),
+      .powerups = vec_new(),
+      .explosions = vec_new(),
+      .time_step = 0,
   };
   return game_state;
 }
@@ -132,7 +141,7 @@ GameState* new_game(Size2 term_size) {
     }
 
     /* If the ship currently has a powerup, decrease the time
-    * until the powerup is gone. */
+     * until the powerup is gone. */
     if (game_state->ship.powerup_time > 0) {
       game_state->ship.powerup_time--;
     }
@@ -160,28 +169,29 @@ GameState* new_game(Size2 term_size) {
 }
 
 void draw_highscores_at(size_t x, size_t y, Vec* highscores) {
-    if (highscores == NULL) {
-      tui_set_str_at(x, y, "ERROR: Failed to read highscores from JSON.", FG_RED, BG_BLACK);
-    } else {
-      char buf[32];
-      tui_set_str_at(x, y, "RANK", FG_BOLD_WHITE, BG_BLACK);
-      tui_set_str_at(x + 10, y, "NAME", FG_BOLD_WHITE, BG_BLACK);
-      tui_set_str_at(x + 20, y, "POINTS", FG_BOLD_WHITE, BG_BLACK);
-      tui_set_str_at(x + 30, y, "DISTANCE", FG_BOLD_WHITE, BG_BLACK);
-      for (size_t i = 0; i < vec_length(highscores); ++i) {
-        if (i >= 10) {
-          break;
-        }
-        sprintf(buf, "#%ld", i + 1);
-        tui_set_str_at(x, y + 1 + i, buf, FG_WHITE, BG_BLACK);
-        Highscore* h = *vec_at(highscores, i);
-        tui_set_str_at(x + 10, y + 1 + i, h->name, FG_WHITE, BG_BLACK);
-        sprintf(buf, "%d", h->points);
-        tui_set_str_at(x + 20, y + 1 + i, buf, FG_WHITE, BG_BLACK);
-        sprintf(buf, "%d", h->distance);
-        tui_set_str_at(x + 30, y + 1 + i, buf, FG_WHITE, BG_BLACK);
+  if (highscores == NULL) {
+    tui_set_str_at(x, y, "ERROR: Failed to read highscores from JSON.", FG_RED,
+                   BG_BLACK);
+  } else {
+    char buf[32];
+    tui_set_str_at(x, y, "RANK", FG_BOLD_WHITE, BG_BLACK);
+    tui_set_str_at(x + 10, y, "NAME", FG_BOLD_WHITE, BG_BLACK);
+    tui_set_str_at(x + 20, y, "POINTS", FG_BOLD_WHITE, BG_BLACK);
+    tui_set_str_at(x + 30, y, "DISTANCE", FG_BOLD_WHITE, BG_BLACK);
+    for (size_t i = 0; i < vec_length(highscores); ++i) {
+      if (i >= 10) {
+        break;
       }
+      sprintf(buf, "#%ld", i + 1);
+      tui_set_str_at(x, y + 1 + i, buf, FG_WHITE, BG_BLACK);
+      Highscore* h = *vec_at(highscores, i);
+      tui_set_str_at(x + 10, y + 1 + i, h->name, FG_WHITE, BG_BLACK);
+      sprintf(buf, "%d", h->points);
+      tui_set_str_at(x + 20, y + 1 + i, buf, FG_WHITE, BG_BLACK);
+      sprintf(buf, "%d", h->distance);
+      tui_set_str_at(x + 30, y + 1 + i, buf, FG_WHITE, BG_BLACK);
     }
+  }
 }
 
 Vec* download_and_parse_highscores(char* name) {
@@ -203,7 +213,8 @@ Vec* download_and_parse_highscores(char* name) {
  * Returns false, if a new game should be started.
  */
 bool title_screen(Size2 term_size, char* name) {
-  /* Create some nice background by drawing some ships flying at different speeds :3 */
+  /* Create some nice background by drawing some ships flying at different
+   * speeds :3 */
   Int2 positions[10];
   int speeds[10];
   for (size_t i = 0; i < 10; ++i) {
@@ -293,21 +304,33 @@ bool title_screen(Size2 term_size, char* name) {
     /* Draw the text. */
     Int2 center = {term_size.x / 2, term_size.y / 2};
     int highscore_y = logo_pos.y + logo_size.y + 2;
-    tui_print_centered(&center, highscore_y, "HIGHSCORES", FG_BOLD_WHITE, BG_BLACK);
-    tui_set_str_at(center.x - 35, highscore_y + 2, "GLOBAL", FG_BOLD_WHITE, BG_BLACK);
-    tui_set_str_at(center.x + 25, highscore_y + 2, "PERSONAL", FG_BOLD_WHITE, BG_BLACK);
+    tui_print_centered(&center, highscore_y, "HIGHSCORES", FG_BOLD_WHITE,
+                       BG_BLACK);
+    tui_set_str_at(center.x - 35, highscore_y + 2, "GLOBAL", FG_BOLD_WHITE,
+                   BG_BLACK);
+    tui_set_str_at(center.x + 25, highscore_y + 2, "PERSONAL", FG_BOLD_WHITE,
+                   BG_BLACK);
     draw_highscores_at(center.x - 50, highscore_y + 4, highscores_all);
     draw_highscores_at(center.x + 10, highscore_y + 4, highscores_name);
-    tui_print_centered(&center, term_size.y - 8, "ASTRONAUT", FG_WHITE, BG_BLACK);
-    tui_print_centered(&center, term_size.y - 7, name, set_name ? FG_RED : FG_GREEN, BG_BLACK);
-    tui_print_centered(&center, term_size.y - 5, "PRESS SPACE TO START THE GAME", FG_GREEN, BG_BLACK);
-    tui_print_centered(&center, term_size.y - 4, "PRESS N TO NAME YOUR ASTRONAUT", set_name ? FG_RED : FG_GREEN, BG_BLACK);
+    tui_print_centered(&center, term_size.y - 8, "ASTRONAUT", FG_WHITE,
+                       BG_BLACK);
+    tui_print_centered(&center, term_size.y - 7, name,
+                       set_name ? FG_RED : FG_GREEN, BG_BLACK);
+    tui_print_centered(&center, term_size.y - 5,
+                       "PRESS SPACE TO START THE GAME", FG_GREEN, BG_BLACK);
+    tui_print_centered(&center, term_size.y - 4,
+                       "PRESS N TO NAME YOUR ASTRONAUT",
+                       set_name ? FG_RED : FG_GREEN, BG_BLACK);
     if (!exploded) {
-      tui_print_centered(&center, term_size.y - 3, "PRESS E TO EXPLODE ALL THE THINGS", FG_GREEN, BG_BLACK);
+      tui_print_centered(&center, term_size.y - 3,
+                         "PRESS E TO EXPLODE ALL THE THINGS", FG_GREEN,
+                         BG_BLACK);
     } else {
-      tui_print_centered(&center, term_size.y - 3, "PRESS E TO TRAVEL BACK IN TIME", FG_GREEN, BG_BLACK);
+      tui_print_centered(&center, term_size.y - 3,
+                         "PRESS E TO TRAVEL BACK IN TIME", FG_GREEN, BG_BLACK);
     }
-    tui_print_centered(&center, term_size.y - 2, "PRESS Q TO QUIT", FG_GREEN, BG_BLACK);
+    tui_print_centered(&center, term_size.y - 2, "PRESS Q TO QUIT", FG_GREEN,
+                       BG_BLACK);
 
     /* Draw and move the ships. */
     if (!exploded) {
@@ -345,16 +368,17 @@ void draw_game_over_screen(Size2 term_size, GameState* gs, char* name) {
   sprintf(buf, "DISTANCE: %d", gs->time_step);
   tui_print_centered(&center, center.y + 1, buf, FG_WHITE, BG_BLACK);
 
-  tui_print_centered(&center, center.y + 3, "PRESS SPACE TO CONTINUE", FG_GREEN, BG_BLACK);
+  tui_print_centered(&center, center.y + 3, "PRESS SPACE TO CONTINUE", FG_GREEN,
+                     BG_BLACK);
 
   tui_update();
 }
 
 void game_over_screen(Size2 term_size, GameState* gs, char* name) {
-  Highscore highscore = (Highscore) {
-    .name = name,
-    .points = gs->points,
-    .distance = gs->time_step,
+  Highscore highscore = (Highscore){
+      .name = name,
+      .points = gs->points,
+      .distance = gs->time_step,
   };
 
   JsonValue* highscore_json = highscore_to_json(&highscore);
@@ -368,7 +392,8 @@ void game_over_screen(Size2 term_size, GameState* gs, char* name) {
   /* Wait for 2 seconds to not skip if user mashes keys while dying. */
   usleep(2000000);
 
-  /* Read all keys in the buffer to not skip the next screen (again for key mashing) */
+  /* Read all keys in the buffer to not skip the next screen (again for key
+   * mashing) */
   while (stdin_has_changed()) {
     read_from_stdin();
   }
@@ -383,7 +408,6 @@ void game_over_screen(Size2 term_size, GameState* gs, char* name) {
 
     /* Wait for 2 seconds to not skip if user mashes keys while dying. */
     usleep(10000);
-
   }
 }
 
@@ -403,7 +427,9 @@ int main(void) {
   Size2 term_size = tui_size();
   if (term_size.x < min_term_size.x || term_size.y < min_term_size.y) {
     tui_shutdown();
-    printf("ERROR: terminal has to be at least of size %lu x %lu but is of size %lu x %lu.\n", min_term_size.x, min_term_size.y, term_size.x, term_size.y);
+    printf("ERROR: terminal has to be at least of size %lu x %lu but is of "
+           "size %lu x %lu.\n",
+           min_term_size.x, min_term_size.y, term_size.x, term_size.y);
     exit(1);
   }
 
