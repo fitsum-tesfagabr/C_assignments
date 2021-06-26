@@ -1,5 +1,5 @@
+#include "../tui/ansi_codes.h"
 #include "../unity/unity.h"
-
 #include "./game_highscores.h"
 #include "./json_data.h"
 #include "./json_printer.h"
@@ -94,9 +94,14 @@ void test_json_to_highscores(void) {
   /* This is a short demonistration how the memebers are saved in the json
    * format
    */
+  printf("\n");
+  fprintf(stdout, FG_BLACK BG_YELLOW
+          "Json Data to be converted to Highscores" COLOR_RESET "\n");
+
   json_fprint_object(stdout, 0, jobj);
 
-  /***************************TEST***************************************/
+  /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
+  /***************************TEST*********************************************/
   /* Test if the function json_to_highscores return the Highscrores collected in
    * vec */
   Vec* mem_r = json_to_highscores(val);
