@@ -8,7 +8,7 @@
 
 void draw_info_bar(GameState* gs) {
   char buf[255];
-  sprintf(buf, "LIFES: %d    POINTS: %d    DISTANCE: %d    POWERUP: %d",
+  sprintf(buf, "LIFES: %d    POINTS: %d   DISTANCE: %d    POWERUP: %d",
           gs->ship.health, gs->points, gs->time_step, gs->ship.powerup_time);
   tui_set_str_at(0, gs->term_size.y - 1, buf, FG_WHITE, BG_BLACK);
 }
@@ -140,17 +140,17 @@ void draw_explosions(GameState* gs) {
 }
 
 bool handle_input(GameState* gs, char c) {
-  if (c == 'w' || c == 'k') {
+  if (c == 'w' || c == 'i') {
     if (gs->ship.pos.y > 2) {
       gs->ship.pos.y -= 1;
     }
   }
-  if (c == 's' || c == 'j') {
+  if (c == 's' || c == 'k') {
     if (gs->ship.pos.y < gs->field_size.y - 3) {
       gs->ship.pos.y += 1;
     }
   }
-  if (c == 'a' || c == 'h') {
+  if (c == 'a' || c == 'j') {
     if (gs->ship.pos.x > 1) {
       gs->ship.pos.x -= 1;
     }

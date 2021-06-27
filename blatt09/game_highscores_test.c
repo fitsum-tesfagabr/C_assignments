@@ -85,7 +85,7 @@ void test_json_to_highscores(void) {
   vec_push(mems, mem3);
   vec_push(mems, mem4);
 
-  /* Collect all members in one Object*/
+  /* Collect and represent all members in one Object*/
   JsonObject* jobj = json_object_new(mems);
 
   /* Represent the object of members as a value */
@@ -102,30 +102,43 @@ void test_json_to_highscores(void) {
 
   /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   /***************************TEST*********************************************/
+  
   /* Test if the function json_to_highscores return the Highscrores collected in
    * vec */
+  {// TEST_BLOCK start
+
+  Highscore* h = NULL;  
   Vec* mem_r = json_to_highscores(val);
   /* The total Scores are four */
   TEST_ASSERT_EQUAL_size_t(4, vec_length(mem_r));
 
   /* Top scorer is "bar" */
-  Highscore* h = *vec_at(mem_r, 0);
+  h = *vec_at(mem_r, 0);
   TEST_ASSERT_EQUAL_STRING("bar", h->name);
-  /* Second top scorer points = 55 */
+  TEST_ASSERT_EQUAL_INT(65, h->points);
+  TEST_ASSERT_EQUAL_INT(308, h->distance);
+  
+  /* Second top scorer is "foo" */
   h = *vec_at(mem_r, 1);
+  TEST_ASSERT_EQUAL_STRING("foo", h->name);
   TEST_ASSERT_EQUAL_INT(55, h->points);
-  /* Third top scorer distance = 1308 */
+  TEST_ASSERT_EQUAL_INT(198, h->distance);
+  
+  /* Third top scorer is "xxx" */
   h = *vec_at(mem_r, 2);
+  TEST_ASSERT_EQUAL_STRING("xxx", h->name);
+  TEST_ASSERT_EQUAL_INT(23, h->points);
   TEST_ASSERT_EQUAL_INT(1308, h->distance);
-  /* The fourth top scorer is "AAA" with total points = 22 and distance = 1889
-   */
+  
+  /* The fourth top scorer is "AAA" */
   h = *vec_at(mem_r, 3);
   TEST_ASSERT_EQUAL_STRING("AAA", h->name);
   TEST_ASSERT_EQUAL_INT(22, h->points);
   TEST_ASSERT_EQUAL_INT(1889, h->distance);
 
   printf("\n");
-
+  
+  
   /* Free all the allocated memories */
   if (val != NULL) {
     json_value_free(val);
@@ -137,8 +150,9 @@ void test_json_to_highscores(void) {
       free(*vec_at(mem_r, i));
     }
     vec_free(mem_r);
-  }
-}
+  }// end of if
+  }// TEST_BLOCK end
+}// end of method
 
 int main(void) {
   UNITY_BEGIN();
