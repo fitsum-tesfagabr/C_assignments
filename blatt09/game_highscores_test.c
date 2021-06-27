@@ -102,57 +102,51 @@ void test_json_to_highscores(void) {
 
   /*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
   /***************************TEST*********************************************/
-  
+
   /* Test if the function json_to_highscores return the Highscrores collected in
    * vec */
-  {// TEST_BLOCK start
+  { // TEST_BLOCK start
 
-  Highscore* h = NULL;  
-  Vec* mem_r = json_to_highscores(val);
-  /* The total Scores are four */
-  TEST_ASSERT_EQUAL_size_t(4, vec_length(mem_r));
+    Highscore* h = NULL;
+    Vec* mem_r = json_to_highscores(val);
+    /* The total Scores are four */
+    TEST_ASSERT_EQUAL_size_t(4, vec_length(mem_r));
 
-  /* Top scorer is "bar" */
-  h = *vec_at(mem_r, 0);
-  TEST_ASSERT_EQUAL_STRING("bar", h->name);
-  TEST_ASSERT_EQUAL_INT(65, h->points);
-  TEST_ASSERT_EQUAL_INT(308, h->distance);
-  
-  /* Second top scorer is "foo" */
-  h = *vec_at(mem_r, 1);
-  TEST_ASSERT_EQUAL_STRING("foo", h->name);
-  TEST_ASSERT_EQUAL_INT(55, h->points);
-  TEST_ASSERT_EQUAL_INT(198, h->distance);
-  
-  /* Third top scorer is "xxx" */
-  h = *vec_at(mem_r, 2);
-  TEST_ASSERT_EQUAL_STRING("xxx", h->name);
-  TEST_ASSERT_EQUAL_INT(23, h->points);
-  TEST_ASSERT_EQUAL_INT(1308, h->distance);
-  
-  /* The fourth top scorer is "AAA" */
-  h = *vec_at(mem_r, 3);
-  TEST_ASSERT_EQUAL_STRING("AAA", h->name);
-  TEST_ASSERT_EQUAL_INT(22, h->points);
-  TEST_ASSERT_EQUAL_INT(1889, h->distance);
+    /* Top scorer is "bar" */
+    h = *vec_at(mem_r, 0);
+    TEST_ASSERT_EQUAL_STRING("bar", h->name);
+    TEST_ASSERT_EQUAL_INT(65, h->points);
+    TEST_ASSERT_EQUAL_INT(308, h->distance);
 
-  printf("\n");
-  
-  
-  /* Free all the allocated memories */
-  if (val != NULL) {
-    json_value_free(val);
-  }
-  if (mem_r != NULL) {
-    for (int i = 0; i < vec_length(mem_r); i++) {
-      h = *vec_at(mem_r, i);
-      free(h->name);
-      free(*vec_at(mem_r, i));
+    /* Second top scorer is "foo" */
+    h = *vec_at(mem_r, 1);
+    TEST_ASSERT_EQUAL_STRING("foo", h->name);
+    TEST_ASSERT_EQUAL_INT(55, h->points);
+    TEST_ASSERT_EQUAL_INT(198, h->distance);
+
+    /* Third top scorer is "xxx" */
+    h = *vec_at(mem_r, 2);
+    TEST_ASSERT_EQUAL_STRING("xxx", h->name);
+    TEST_ASSERT_EQUAL_INT(23, h->points);
+    TEST_ASSERT_EQUAL_INT(1308, h->distance);
+
+    /* The fourth top scorer is "AAA" */
+    h = *vec_at(mem_r, 3);
+    TEST_ASSERT_EQUAL_STRING("AAA", h->name);
+    TEST_ASSERT_EQUAL_INT(22, h->points);
+    TEST_ASSERT_EQUAL_INT(1889, h->distance);
+
+    printf("\n");
+
+    /* Free all the allocated memories */
+    if (val != NULL) {
+      json_value_free(val);
     }
-    vec_free(mem_r);
-  }// end of if
-  }// TEST_BLOCK end
-}// end of method
+    if (mem_r != NULL) {
+      highscores_free(mem_r);
+    } // end of if
+  }   // TEST_BLOCK end
+} // end of method
 
 int main(void) {
   UNITY_BEGIN();
