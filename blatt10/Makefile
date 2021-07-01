@@ -6,8 +6,8 @@ CFLAGS= -fsanitize=address -g -Wall
 
 compile: game_of_life
 
-test: game_of_life_test
-	./game_of_life_test
+test: game_of_life
+	./game_of_life 10 10
 
 clean:
 	rm -f *.o game_of_life game_of_life_test ../tui/*.o

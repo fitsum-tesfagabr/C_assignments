@@ -1,8 +1,8 @@
-#include <stdlib.h>
-#include <unistd.h>
-#include <time.h>
-#include <string.h>
 #include <math.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <unistd.h>
 
 #include "../tui/tui.h"
 #include "./bool_matrix.h"
@@ -29,23 +29,20 @@ int main(int argc, char** argv) {
 
   tui_init();
 
-  GameState gs = (GameState) {
-    .time_step = 0,
-    .speed = 25,
-    .simulation_active = false,
-    .selection_active = false,
-    .cursor_pos = {0, 0},
-    .m_cur = bool_matrix_new(width, height, false),
-    .m_next = bool_matrix_new(width, height, false),
+  GameState gs = (GameState){
+      .time_step = 0,
+      .speed = 25,
+      .simulation_active = false,
+      .selection_active = false,
+      .cursor_pos = {0, 0},
+      .m_cur = bool_matrix_new(width, height, false),
+      .m_next = bool_matrix_new(width, height, false),
   };
-
   while (1) {
     Size2 size = tui_size();
 
-    gs.field_size = (Size2) {
-      MIN(bool_matrix_width(gs.m_cur), size.x),
-      MIN(bool_matrix_height(gs.m_cur), size.y)
-    };
+    gs.field_size = (Size2){MIN(bool_matrix_width(gs.m_cur), size.x),
+                            MIN(bool_matrix_height(gs.m_cur), size.y)};
 
     if (stdin_has_changed()) {
       char c = read_from_stdin();

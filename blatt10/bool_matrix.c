@@ -1,8 +1,8 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
 
 #include "./bool_matrix.h"
 
@@ -18,11 +18,9 @@ BoolMatrix* bool_matrix_new(size_t width, size_t height, bool def) {
     return NULL;
   }
 
-  *m = (BoolMatrix) {
-    .cells = malloc(height * width * sizeof(bool)),
-    .height = height,
-    .width = width
-  };
+  *m = (BoolMatrix){.cells = malloc(height * width * sizeof(bool)),
+                    .height = height,
+                    .width = width};
 
   if (m->cells == NULL) {
     free(m);
@@ -35,7 +33,6 @@ BoolMatrix* bool_matrix_new(size_t width, size_t height, bool def) {
 
   return m;
 }
-
 
 void bool_matrix_free(BoolMatrix* m) {
   free(m->cells);

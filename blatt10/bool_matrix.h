@@ -1,8 +1,8 @@
 #ifndef BOOL_MATRIX_H
 #define BOOL_MATRIX_H
 
+#include <stdbool.h>
 #include <stddef.h>
-
 /* Representation of the terminal content as a matrix of `cells`. */
 typedef struct BoolMatrix BoolMatrix;
 
