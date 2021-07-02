@@ -16,6 +16,7 @@ int main(int argc, char** argv) {
     printf("  %s WIDTH HEIGHT\n", argv[0]);
     exit(1);
   }
+
   size_t width;
   size_t height;
   if (sscanf(argv[1], "%ld", &width) != 1) {
@@ -25,6 +26,11 @@ int main(int argc, char** argv) {
   if (sscanf(argv[2], "%ld", &height) != 1) {
     printf("ERROR: Failed to read height from args.\n");
     exit(1);
+  }
+  /* to ignore unnecessary input values */
+  if(width <= 0 || height <= 0){
+      printf("INPUT ERROR: WIDTH AND HEIGHT must be > 0\n");
+      exit(1);
   }
 
   tui_init();
