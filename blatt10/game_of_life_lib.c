@@ -6,6 +6,7 @@
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
+bool done = false;
 /*
  - Any live cell with fewer than two live neighbours dies, as if by
    underpopulation.
@@ -16,13 +17,15 @@
  - Any dead cell with exactly three live neighbours becomes a
    live cell, as if by reproduction.
 */
+
 bool inside_boundry(GameState* gs, int x, int y) {
   return x >= 0 && y >= 0 && x < gs->field_size.x && y < gs->field_size.y;
-}
+}// end of inside_boundry
+
 bool handle_input(GameState* gs, char c) {
   if (c == 'q') {
     return true;
-  }
+  }//end of if
   Size2 size = (Size2){.x = gs->cursor_pos.x, .y = gs->cursor_pos.y};
   FILE* u_file;
   FILE* i_file;
@@ -68,6 +71,7 @@ bool handle_input(GameState* gs, char c) {
     }
     break;
   case 'c':
+    //gs->selection_active = false;
     for (int i = 0; i < gs->field_size.x; i++) {
       for (int j = 0; j < gs->field_size.y; j++) {
         *bool_matrix_at(gs->m_next, i, j) = false;
@@ -75,14 +79,17 @@ bool handle_input(GameState* gs, char c) {
     }
     break;
   case 'u':
+    done = true;
     u_file = fopen("save_u.gol", "w");
     write_to_file(gs, u_file);
     break;
   case 'i':
+    done = true;
     i_file = fopen("save_i.gol", "w");
     write_to_file(gs, i_file);
     break;
   case 'o':
+    done = true;
     o_file = fopen("save_o.gol", "w");
     write_to_file(gs, o_file);
     break;
@@ -99,12 +106,13 @@ bool handle_input(GameState* gs, char c) {
     read_from_file(gs, o_file);
     break;
   case 'v':
+    done = false;
     gs->selection_active = !gs->selection_active;
+    gs->selection_start = (Size2){.x = gs->cursor_pos.x, .y = gs->cursor_pos.y};
     break;
-  }
-
+  }// end of switch
   return false;
-}
+}// end of function handle_input
 
 #define MIN(x, y) (((x) < (y)) ? (x) : (y))
 void read_from_file(GameState* gs, FILE* file) {
@@ -126,30 +134,39 @@ void read_from_file(GameState* gs, FILE* file) {
         i = 0;
         wc[k] = '\0';
         continue;
-      }
+      }// end of if
       if (comma) {
-
         hc[i] = dimention[k];
         i++;
       } else {
         wc[i] = dimention[k];
         i++;
-      }
-    }
+      }// end of else
+    }// end of for loop
+    int start_x = 0;
+    int start_y = 0;
+    char c;
+    int diff = atoi(wc) - gs->field_size.x;
     /*clear screan */
+    if(gs->selection_active){
+        start_x = gs->cursor_pos.x;
+        start_y = gs->cursor_pos.y;
+    }// end of if
+   if(!gs->selection_active){ 
     for (int i = 0; i < gs->field_size.y; i++) {
       for (int j = 0; j < gs->field_size.x; j++) {
         *bool_matrix_at(gs->m_next, j, i) = false;
         *bool_matrix_at(gs->m_cur, j, i) = false;
-      }
-    }
-    /* Draw from file */
-    char c;
+      }// end of for internal
+    }// end of for external
+  }// end of if 
     int wid = MIN(atoi(wc), gs->field_size.x);
     int hei = MIN(atoi(hc), gs->field_size.y);
-    int diff = atoi(wc) - gs->field_size.x;
-    for (int i = 0; i < hei; i++) {
-      for (int j = 0; j < wid; j++) {
+    wid = wid + start_x > gs->field_size.x ? gs->field_size.x: wid + start_x;
+    hei = hei + start_y > gs->field_size.y ? gs->field_size.y: hei + start_y;
+    /* Draw from file */
+    for (int i = start_y; i < hei; i++) {
+      for (int j = start_x; j < wid; j++) {
         c = fgetc(file);
         if (c == '.') {
           *bool_matrix_at(gs->m_next, j, i) = false;
@@ -163,8 +180,8 @@ void read_from_file(GameState* gs, FILE* file) {
           // move_cursor_to(j, i);
           // printf("n");
           j--;
-        }
-      }
+        }// end of else if
+      }// end of for internal
       int k = 0;
       while (k <= diff) {
         fgetc(file);
@@ -174,41 +191,74 @@ void read_from_file(GameState* gs, FILE* file) {
           exit(42);
         }
         ++k;
-      }
-    }
+      }// end of while
+    }// end of external for loop
     /* wrap up */
     if (dimention != NULL) {
       free(dimention);
     }
-  }
+  }// end of if that checks fiel if NULL
   if (file != NULL) {
-
     fclose(file);
   }
-}
+}// end of read_from_file
 
 void write_to_file(GameState* gs, FILE* file) {
+  size_t width = gs->field_size.x;
+  size_t height = gs->field_size.y;
+
+  int end_x = gs->field_size.x;
+  int end_y = gs->field_size.y;
+  
+  int start_x = 0;
+  int start_y = 0;
+
+  if(gs->selection_active){
+      start_x = gs->selection_start.x;
+      start_y = gs->selection_start.y;
+      end_x = gs->cursor_pos.x + 1;
+      end_y = gs->cursor_pos.y + 1;
+      width = abs(gs->selection_start.x - gs->cursor_pos.x) + 1;
+      height = abs(gs->selection_start.y - gs->cursor_pos.y) + 1;
+  }// end of if
+
   if (file != NULL) {
-    fprintf(file, "%ld,%ld\n", gs->field_size.x, gs->field_size.y);
-    for (int i = 0; i < gs->field_size.y; i++) {
-      for (int j = 0; j < gs->field_size.x; j++) {
+    
+    fprintf(file, "%ld,%ld\n", width, height);
+
+    for (int i = start_y; i < end_y; i++) {
+      for (int j = start_x; j < end_x; j++) {
         if (*bool_matrix_at(gs->m_cur, j, i)) {
           fputc('#', file);
         } else {
           fputc('.', file);
         }
-      }
+      }// end of for internal
       if (!(i >= gs->field_size.y - 1)) {
         fputc('\n', file);
       }
-    }
+    }// end of for external
     fclose(file);
+  }// end of if to check file if NULL
+}// end of write_to_file
+
+bool inside_selection(GameState* gs, Size2 size){
+  if(gs->selection_active){
+  if(
+     ((size.x >= gs->selection_start.x && size.x <= gs->cursor_pos.x) && 
+     (size.y >= gs->selection_start.y && size.y <= gs->cursor_pos.y))
+      ){
+        return true;
   }
-}
+  
+  }// end of if
+  return false;
+  }// end of inside_selection
+
 void print_cell(GameState* gs, Size2 size, const char c) {
   char* bg_color = BG_BLACK;
   char* fg_color = FG_WHITE;
-  if (size.x == gs->cursor_pos.x && size.y == gs->cursor_pos.y) {
+  if ((inside_selection(gs, size) && !done) || (size.x == gs->cursor_pos.x && size.y == gs->cursor_pos.y)) {
     bg_color = BG_WHITE;
     fg_color = FG_BLACK;
   }
@@ -216,18 +266,18 @@ void print_cell(GameState* gs, Size2 size, const char c) {
   cell->content = c;
   cell->text_color = fg_color;
   cell->background_color = bg_color;
-}
+}// end of print_cell
 
 void print_cursor(GameState* gs, Size2 size) {
   Cell* cell = tui_cell_at(size.x, size.y);
   cell->content = ' ';
   cell->text_color = FG_BLACK;
   cell->background_color = BG_WHITE;
-}
+}// end of print cursor
 
 bool cells_eq(BoolMatrix* c1, BoolMatrix* c2, int x, int y) {
   return *bool_matrix_at(c1, x, y) == *bool_matrix_at(c2, x, y);
-}
+}// end of cells_eq
 
 void update(GameState* gs) {
   if (gs->time_step % gs->speed == 0) {
@@ -235,11 +285,11 @@ void update(GameState* gs) {
       for (int j = 0; j < gs->field_size.y; j++) {
         if (!cells_eq(gs->m_cur, gs->m_next, i, j)) {
           *bool_matrix_at(gs->m_cur, i, j) = *bool_matrix_at(gs->m_next, i, j);
-        }
-      }
-    }
-  }
-}
+        }// end of if
+      }// end of for internal
+    }// end of for external
+  }// end of if
+}// end of update
 
 void draw(GameState* gs) {
   /*
@@ -279,7 +329,7 @@ void draw(GameState* gs) {
     }
   }
   print_cells(gs);
-}
+}// end fo draw
 
 int count_live_cells(GameState* gs, int x, int y) {
   int count_live_neighbours = 0;
@@ -315,7 +365,7 @@ int count_live_cells(GameState* gs, int x, int y) {
     }
   }
   return count_live_neighbours;
-}
+}// end of count_live_cells
 
 void print_cells(GameState* gs) {
   Size2 size;
@@ -330,4 +380,4 @@ void print_cells(GameState* gs) {
       }
     }
   }
-}
+}// end of print cells
