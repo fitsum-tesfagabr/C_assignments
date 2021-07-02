@@ -1,10 +1,11 @@
+#include "./game_of_life_lib.h"
+#include "../tui/tui.h"
+#include "./bool_matrix.h"
 #include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
 #include <unistd.h>
-
-#include "./game_of_life_lib.h"
 /*
  - Any live cell with fewer than two live neighbours dies, as if by
    underpopulation.
@@ -109,21 +110,21 @@ bool handle_input(GameState* gs, char c) {
 void read_from_file(GameState* gs, FILE* file) {
   if (file != NULL) {
     /* First clear the screen */
-    for (int i = 0; i < gs->field_size.y; i++) {
-      for (int j = 0; j < gs->field_size.x; j++) {
-        *bool_matrix_at(gs->m_next, j, i) = false;
-      }
-    }
-    char dimention[25555];
-    char wc[5];
-    char hc[5];
+    char* dimention = NULL;
+    size_t len = 0;
+    size_t read = 0;
+    char wc[5] = {'\0'};
+    char hc[5] = {'\0'};
     int i = 0;
-    fscanf(file, "%s", dimention);
+    read = getline(&dimention, &len, file);
+
     bool comma = false;
-    for (int k = 0; k < strlen(dimention); k++) {
+
+    for (int k = 0; k < read; k++) {
       if (dimention[k] == ',') {
         comma = true;
         i = 0;
+        wc[k] = '\0';
         continue;
       }
       if (comma) {
@@ -135,10 +136,18 @@ void read_from_file(GameState* gs, FILE* file) {
         i++;
       }
     }
+    /*clear screan */
+    for (int i = 0; i < gs->field_size.y; i++) {
+      for (int j = 0; j < gs->field_size.x; j++) {
+        *bool_matrix_at(gs->m_next, j, i) = false;
+        *bool_matrix_at(gs->m_cur, j, i) = false;
+      }
+    }
+    /* Draw from file */
     char c;
     int wid = MIN(atoi(wc), gs->field_size.x);
     int hei = MIN(atoi(hc), gs->field_size.y);
-
+    int diff = atoi(wc) - gs->field_size.x;
     for (int i = 0; i < hei; i++) {
       for (int j = 0; j < wid; j++) {
         c = fgetc(file);
@@ -156,16 +165,25 @@ void read_from_file(GameState* gs, FILE* file) {
           j--;
         }
       }
-      if (atoi(wc) > gs->field_size.x) {
-        for (int k = 0; k <= atoi(wc) - gs->field_size.x; k++) {
-          fgetc(file);
-          // move_cursor_to(0, 0);
-          // printf("o");
+      int k = 0;
+      while (k <= diff) {
+        fgetc(file);
+        // move_cursor_to(0, i);
+        // printf("o");
+        if (k > 100) {
+          exit(42);
         }
+        ++k;
       }
     }
-    fclose(file);
     /* wrap up */
+    if (dimention != NULL) {
+      free(dimention);
+    }
+  }
+  if (file != NULL) {
+
+    fclose(file);
   }
 }
 
@@ -260,7 +278,7 @@ void draw(GameState* gs) {
       }
     }
   }
-  change_state(gs);
+  print_cells(gs);
 }
 
 int count_live_cells(GameState* gs, int x, int y) {
@@ -299,7 +317,7 @@ int count_live_cells(GameState* gs, int x, int y) {
   return count_live_neighbours;
 }
 
-void change_state(GameState* gs) {
+void print_cells(GameState* gs) {
   Size2 size;
   for (int i = 0; i < gs->field_size.x; i++) {
     for (int j = 0; j < gs->field_size.y; j++) {

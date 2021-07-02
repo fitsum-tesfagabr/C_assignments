@@ -6,8 +6,8 @@ CFLAGS= -fsanitize=address -g -Wall
 
 compile: game_of_life
 
-test: game_of_life
-	./game_of_life 10 10
+test: 
+	echo "Let's Play the Game of Live and Prove if it works correctly!"
 
 clean:
 	rm -f *.o game_of_life game_of_life_test ../tui/*.o
@@ -25,7 +25,7 @@ game_of_life: game_of_life.o game_of_life_lib.o bool_matrix.o ../tui/tui_matrix.
 game_of_life.o: game_of_life.c bool_matrix.h game_of_life_lib.h
 	gcc $(CFLAGS) -c game_of_life.c -o game_of_life.o
 
-game_of_life_lib.o: game_of_life_lib.c ../tui/tui.h ../tui/tui_io.h ../tui/tui_matrix.h ../tui/ansi_codes.h
+game_of_life_lib.o: game_of_life_lib.c bool_matrix.h ../tui/tui.h ../tui/tui_io.h ../tui/tui_matrix.h ../tui/ansi_codes.h
 	gcc $(CFLAGS) -c game_of_life_lib.c -o game_of_life_lib.o
 
 bool_matrix.o: bool_matrix.c ../tui/tui.h ../tui/tui_io.h ../tui/tui_matrix.h ../tui/ansi_codes.h
