@@ -146,7 +146,6 @@ void read_from_file(GameState* gs, FILE* file) {
     int start_x = 0;
     int start_y = 0;
     char c;
-    int diff = atoi(wc) - gs->field_size.x;
     /*clear screan */
     if(gs->selection_active){
         start_x = gs->cursor_pos.x;
@@ -164,6 +163,7 @@ void read_from_file(GameState* gs, FILE* file) {
     int hei = MIN(atoi(hc), gs->field_size.y);
     wid = wid + start_x > gs->field_size.x ? gs->field_size.x: wid + start_x;
     hei = hei + start_y > gs->field_size.y ? gs->field_size.y: hei + start_y;
+    int diff = start_x +  atoi(wc) - gs->field_size.x;
     /* Draw from file */
     for (int i = start_y; i < hei; i++) {
       for (int j = start_x; j < wid; j++) {
