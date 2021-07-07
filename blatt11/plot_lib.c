@@ -24,8 +24,8 @@ void plot(GameState* gs, Settings* settings, Function* functions,
           size_t num_functions) {
   double y;
 
-  for (int i = 0; i < num_functions; i++) {
-    Function func = functions[i];
+  for (int j = 0; j < num_functions; j++) {
+    Function func = functions[j];
 
     for (int i = 0; i < settings->x_max; i++) {
       /* The functions oscillate around half of the screen */

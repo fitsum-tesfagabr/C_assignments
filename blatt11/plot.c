@@ -11,7 +11,7 @@ double moving_sin(double x, double t) {
   return sin(x - t);
 }
 double moving_cos(double x, double t) {
-  return cos(x - t);
+  return cos(x + t);
 }
 double moving_weird(double x, double t) {
   return sin(x - t * 2) * tan(x - t * 3);
@@ -26,7 +26,7 @@ int main(void) {
   Function fuctions[] = {
       {.f = moving_sin, .fg_color = FG_RED, .bg_color = BG_BLACK},
       {.f = moving_cos, .fg_color = FG_YELLOW, .bg_color = BG_BLACK},
-      {.f = moving_weird, .fg_color = FG_BLUE, .bg_color = BG_BLACK},
+      {.f = moving_weird, .fg_color = FG_WHITE, .bg_color = BG_BLACK},
       {.f = moving_weird2, .fg_color = FG_GREEN, .bg_color = BG_BLACK},
   };
   Settings settings = {
@@ -48,7 +48,7 @@ int main(void) {
 
     tui_update();
     gs.time_steps++;
-    usleep(15000);
+    usleep(25000);
   }
   tui_shutdown();
   return 0;
