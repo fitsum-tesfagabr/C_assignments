@@ -31,7 +31,7 @@ int main(void) {
   };
   Settings settings = {
       .x_min = 0.0, .y_min = 0.0, .x_max = tui_size().x, .y_max = tui_size().y};
-  GameState gs = {.time_steps = 0, .zoom = 2};
+  GameState gs = {.time_steps = 0, .zoom = 7};
   while (1) {
     settings.x_max = tui_size().x;
     settings.y_max = tui_size().y;
