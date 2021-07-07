@@ -65,7 +65,7 @@ bool ivec_push(IntVec* xs, int x) {
 
 int ivec_pop(IntVec* xs) {
   xs->length--;
-  int x = *ivec_at(xs, xs->length - 1);
+  int x = *ivec_at(xs, xs->length);
   if (xs->length * 2 == xs->capacity) {
     ivec_set_capacity(xs, xs->length);
   }
@@ -75,8 +75,13 @@ int ivec_pop(IntVec* xs) {
 int ivec_remove(IntVec* xs, size_t i) {
   xs->length--;
   int x = *ivec_at(xs, i);
-  for (size_t j = i; j < xs->length; ++j) {
+  size_t j = i;
+  while (j < xs->length) {
     *ivec_at(xs, j) = *ivec_at(xs, j + 1);
+    ++j;
+  }
+  if (xs->length * 2 == xs->capacity) {
+    ivec_set_capacity(xs, xs->length);
   }
   return x;
 }

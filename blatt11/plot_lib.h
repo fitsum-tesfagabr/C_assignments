@@ -14,6 +14,12 @@ typedef struct Settings {
   double y_max;
 } Settings;
 
-void plot(Settings* settings, Function* functions, size_t num_functions);
+typedef struct GameState{
+   size_t time_steps;
+   size_t zoom;
+}GameState;
+
+bool handle_input(GameState* gs, char c);
+void plot(GameState* gs, Settings* settings, Function* functions, size_t num_functions);
 
 #endif /* PLOT_LIB_H */

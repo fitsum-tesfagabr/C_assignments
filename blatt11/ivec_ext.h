@@ -13,4 +13,5 @@ int ivec_sum(IntVec* xs);
 
 int ivec_product(IntVec* xs);
 
+bool is_even(int x);
 #endif /* IVEC_FILTER_H */
