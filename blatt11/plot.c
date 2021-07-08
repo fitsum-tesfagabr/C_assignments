@@ -11,7 +11,7 @@ double moving_sin(double x, double t) {
   return sin(x - t);
 }
 double moving_cos(double x, double t) {
-  return cos(x - t);
+  return cos(x + t);
 }
 double moving_weird(double x, double t) {
   return sin(x - t * 2) * tan(x - t * 3);
@@ -24,10 +24,10 @@ int main(void) {
   tui_init();
 
   Function fuctions[] = {
-      {.f = moving_sin, .fg_color = FG_RED, .bg_color = BG_BLACK},
-      {.f = moving_cos, .fg_color = FG_YELLOW, .bg_color = BG_BLACK},
-      {.f = moving_weird, .fg_color = FG_BLUE, .bg_color = BG_BLACK},
-      {.f = moving_weird2, .fg_color = FG_GREEN, .bg_color = BG_BLACK},
+      {.f = moving_sin, .fg_color = FG_HI_RED, .bg_color = BG_BLACK},
+      {.f = moving_cos, .fg_color = FG_HI_YELLOW, .bg_color = BG_BLACK},
+      {.f = moving_weird, .fg_color = FG_HI_CYAN, .bg_color = BG_BLACK},
+      {.f = moving_weird2, .fg_color = FG_HI_BLUE, .bg_color = BG_BLACK},
   };
   Settings settings = {
       .x_min = 0.0, .y_min = 0.0, .x_max = tui_size().x, .y_max = tui_size().y};
