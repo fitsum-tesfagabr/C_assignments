@@ -18,7 +18,7 @@ double moving_weird2(double x, double t) {
 }
 
 double moving_weird3(double x, double t) {
-  return sin(x - t)*sin(x - t) + cos(x*x - t)*cos(x*x - t);
+  return sin(x - t) * sin(x - t) + cos(x * x - t) * cos(x * x - t);
 }
 int main(void) {
   tui_init();
@@ -32,8 +32,8 @@ int main(void) {
   Settings settings = {
       .x_min = 0.0, .y_min = 0.0, .x_max = tui_size().x, .y_max = tui_size().y};
   GameState gs = {.time_steps = 0, .zoom = 7};
- 
-  size_t num_functions = sizeof(functions)/sizeof(functions[0]);
+
+  size_t num_functions = sizeof(functions) / sizeof(functions[0]);
   while (1) {
     settings.x_max = tui_size().x;
     settings.y_max = tui_size().y;
