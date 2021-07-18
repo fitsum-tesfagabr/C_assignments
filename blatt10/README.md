@@ -74,7 +74,7 @@ Schöne Abgabe!
 Christian: <christian.handschuh@uranus.uni-freiburg.de>+
 
 
-
+## Build Log  🟢 (success)
 ### clone  🟢 (success)
 ```bash
 Initialized empty Git repository in /drone/src/.git/
