@@ -1,0 +1,5 @@
+Zeitaufwand: 48:00
+
+This was a real experience to practice C, specially to work with memory and
+manage it accordingly.
+I have really enjoyed it!
