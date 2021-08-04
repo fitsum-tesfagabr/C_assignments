@@ -194,10 +194,6 @@ bool handle_input(GameState* gs, char c) {
         save_highscore(gs);
       }
     }
-    move_cursor_to(1, gs->play_field_end.y + 10);
-    printf("%d X", gs->count_flags);
-    move_cursor_to(10, gs->play_field_end.y + 10);
-    printf("%ld *", vec_length(gs->mines));
     break;
   case ' ':
 

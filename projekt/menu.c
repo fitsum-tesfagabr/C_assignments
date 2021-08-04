@@ -241,7 +241,7 @@ void highscores_menu(GameState* gs, Menu_status* st) {
   if (json != NULL) {
     Vec* h_scores = json_to_highscores(json);
     for (int i = 0; i < vec_length(h_scores); i++) {
-
+      
       H_score* h = *vec_at(h_scores, i);
       /* display points */
       sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
@@ -365,6 +365,9 @@ JsonValue* highscore_to_json(H_score* highscore) {
 
 JsonValue* convert_highscores_vec_to_value(GameState* gs) {
   vec_sort(gs->highscores);
+  while(vec_length(gs->highscores) > 10){
+      vec_pop(gs->highscores);
+  }
   Vec* members = vec_new();
   JsonMember* memb[10];
   char rank[10][100];
