@@ -15,14 +15,16 @@
 #include "./reader.h"
 #include "./vec.h"
 
-/* Define all the properties needed for the game inside a structure */
+/* Define all the MODES needed for the game inside a structure */
 typedef enum PlayMode { PLAY, MENU, PAUSE } PlayMode;
 
+/* Datastructure for coordinates */
 typedef struct Int2 {
   size_t x;
   size_t y;
 } Int2;
 
+/* Datastructure for Score infor */
 typedef struct Highscore {
   int points;
   int width;
@@ -31,6 +33,7 @@ typedef struct Highscore {
   int play_time;
 } H_score;
 
+/* Game Properties */
 typedef struct GameState {
   Size2 term_size;
   Int2 field_begin;
@@ -58,25 +61,63 @@ typedef struct GameState {
   bool explosion;
 
 } GameState;
+
+/* Clean pre defined properties and exit safely with out memory leaks and
+ * Terminal will be set to its default */
 void exit_safely(GameState* gs);
+
+/* Display necessary infos while playing. Ex. play time in seconds */
 void draw_info_bar(GameState* gs);
+
+/* Display Mine sweeper frame */
 void draw_frame(GameState* gs);
+
+/* Display Cursor around the field */
 void draw_cursor(GameState* gs);
+
+/* Display Game patterns */
 void draw_new_game(GameState* gs);
+
+/* Fill all play field cells with '.' */
 void draw_default(GameState* gs);
+
+/* Generate new game. Random mines are shuffled and distributed around the
+ * block. */
 void create_new_game(GameState* gs);
 void update_cells_status(GameState* gs);
+
+/* Count neighbouring 8 cells with mines. */
 int count_mines(GameState* gs, int x, int y, char c);
+
+/* If Cell with no-neighouring cells with mines are pressed then the
+ * neighbouring cells with no mines will be opened */
 void open_safe_cells(GameState* gs, int x, int y);
 void free_safe_cells(GameState* gs, int x, int y, GameMatrix* m);
+
+/* Retruns either '.', '*', ' ' or a number. */
 char cell_content(GameMatrix* m, int x, int y);
+
+/* Copy one cell info to another cell info */
 void copy_content(GameState* gs, GameMatrix* dest, GameMatrix* source);
+
+/* Check if Player has opened all cells or set flag on Cells*/
 bool is_all_visited(GameState* gs);
+
+/* Count cells with no mines */
 int count_safe_cells(GameState* gs);
+
+/* Check for Winning */
 bool is_winner(GameState* gs);
+
+/* Manage input keys by user */
 bool handle_input(GameState* gs, char c);
+
+/* Set every cell to default */
 void reset_game(GameState* gs, Vec* vector);
-char* fgetline(FILE* file);
+
+/* Read setting infos from file */
 void read_settings(GameState* gs, FILE* file);
+
+/* Write setting infos to file */
 void write_settings(GameState* gs, FILE* file);
 #endif

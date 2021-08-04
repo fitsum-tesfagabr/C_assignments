@@ -61,6 +61,16 @@ void main_menu(GameState* gs, Menu_status* st) {
 
   sprintf(shortcut[4], "  SPACE  ACTIVATE ITEM");
   tui_set_str_at(1, 11, shortcut[4], FG_WHITE, BG_BLACK);
+
+  char info[3][255];
+  sprintf(info[0], "GAME INFORMATION");
+  tui_set_str_at(1, 13, info[0], FG_HI_MAGENTA, BG_BLACK);
+
+  sprintf(info[1], "MIN. PLAY FIELD DIMENTION (W X H) = 5 X 5");
+  tui_set_str_at(3, 14, info[1], FG_HI_BLUE, BG_BLACK);
+
+  sprintf(info[2], "MAX. PLAY FIELD DIMENTION (W X H) = 50 X 17");
+  tui_set_str_at(3, 15, info[2], FG_HI_BLUE, BG_BLACK);
 }
 
 void highlight_menu_cursor(Menu_status* st) {
