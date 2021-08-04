@@ -45,6 +45,7 @@ int main(int argc, char** argv) {
       .play_time = 1,
       .play_field_width = 15,
       .play_field_height = 15,
+      .probability = 0.15,
       .cursor_pos =
           (Int2){game_state.field_begin.x + 1, game_state.field_begin.y + 1},
       .play_field_begin =

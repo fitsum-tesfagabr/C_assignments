@@ -7,18 +7,9 @@
 #include <time.h>
 #include <unistd.h>
 
-/* Read line by line */
-char* fgetline(FILE* file) {
-  char* line = NULL;
-  size_t len = 0;
-  ssize_t success = getline(&line, &len, file);
-  if (success <= 0) {
-    free(line);
-    return NULL;
-  } else {
-    line[success - 1] = '\0';
-    return line;
-  }
+time_t get_time() {
+  time_t now = time(0);
+  return now;
 }
 
 void read_settings(GameState* gs, FILE* file) {
@@ -61,8 +52,8 @@ void draw_frame(GameState* gs) {
 void draw_info_bar(GameState* gs) {
   char buf[255];
   char shortcut[6][255];
-  if (gs->time_step % 75 == 0 && gs->mode == PLAY) {
-    gs->play_time++;
+  if (gs->mode == PLAY) {
+    gs->play_time = get_time() - gs->start_time;
   }
   sprintf(buf, "%d SECONDS", gs->play_time);
   tui_set_str_at(1, gs->play_field_end.y + 3, buf, FG_WHITE, BG_BLACK);

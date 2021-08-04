@@ -75,6 +75,7 @@ void select_menu(GameState* gs, Menu_status* st) {
       gs->endgame_info = "";
       gs->cursor_pos = (Int2){.x = 2, .y = 2};
       gs->play_time = 1;
+      gs->start_time = time(0);
       draw_new_game(gs);
       break;
     case 1:
@@ -237,20 +238,22 @@ void highscores_menu(GameState* gs, Menu_status* st) {
   tui_set_str_at(3, 3, buf[1], FG_WHITE, BG_BLACK);
 
   char* file_name = "highscores.json";
-  JsonValue* json = file_to_json(file_name);
-  if (json != NULL) {
-    Vec* h_scores = json_to_highscores(json);
-    for (int i = 0; i < vec_length(h_scores); i++) {
-      
-      H_score* h = *vec_at(h_scores, i);
-      /* display points */
-      sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
-              h->width, h->height, h->probability);
-      tui_set_str_at(3, 4 + i, buf[2 + i], FG_HI_WHITE, BG_BLACK);
+  if (vec_length(gs->highscores) > 0) {
+    JsonValue* json = file_to_json(file_name);
+    if (json != NULL) {
+      Vec* h_scores = json_to_highscores(json);
+      for (int i = 0; i < vec_length(h_scores); i++) {
+
+        H_score* h = *vec_at(h_scores, i);
+        /* display points */
+        sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
+                h->width, h->height, h->probability);
+        tui_set_str_at(3, 4 + i, buf[2 + i], FG_HI_WHITE, BG_BLACK);
+      }
+      vec_free(h_scores);
     }
-    vec_free(h_scores);
+    json_value_free(json);
   }
-  json_value_free(json);
 }
 
 void display_highscores(GameState* gs, Menu_status* st) {
@@ -365,9 +368,6 @@ JsonValue* highscore_to_json(H_score* highscore) {
 
 JsonValue* convert_highscores_vec_to_value(GameState* gs) {
   vec_sort(gs->highscores);
-  while(vec_length(gs->highscores) > 10){
-      vec_pop(gs->highscores);
-  }
   Vec* members = vec_new();
   JsonMember* memb[10];
   char rank[10][100];

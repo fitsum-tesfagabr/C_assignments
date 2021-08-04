@@ -41,6 +41,7 @@ typedef struct GameState {
   Int2 cursor_pos;
   PlayMode mode;
   Vec* highscores;
+  time_t start_time;
   char* endgame_info;
   size_t play_field_width;
   size_t play_field_height;
