@@ -3,8 +3,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./vec.h"
 #include "./mini_sweeper_lib.h"
+#include "./vec.h"
 
 struct Vec {
   void** data;     /* dynamic memory area containing the integers */
@@ -93,7 +93,7 @@ void swap_location(Vec* xs, int x, int y) {
   xs->data[y] = tmp;
 }
 
-int vec_max_between(Vec *xs, size_t from, size_t to) {
+int vec_max_between(Vec* xs, size_t from, size_t to) {
   if (xs == NULL) {
     return -1;
   }
@@ -109,7 +109,7 @@ int vec_max_between(Vec *xs, size_t from, size_t to) {
     //
     bool complete = false;
 
-    size_t max_location = from; // index of smallest element 
+    size_t max_location = from; // index of smallest element
 
     for (int i = from; i < to - 1; i++) {
 
@@ -118,14 +118,14 @@ int vec_max_between(Vec *xs, size_t from, size_t to) {
         // element in the array, it need not be compared
         // with other elements. Therefore, the loop will
         // be break and the 'i + 1' will be checked again.
-        if (((H_score* )xs->data[j])->points > ((H_score*)xs->data[i])->points) {
-          max_location = j; // j'th element is smaller than i'th element 
+        if (((H_score*)xs->data[j])->points > ((H_score*)xs->data[i])->points) {
+          max_location = j; // j'th element is smaller than i'th element
           break;
         }
         // after the element is compared with all the remaining
         // elements in the range and is smaller than all the
         // elements, no other operations are needed.
-        // Therefore, the function terminates. 
+        // Therefore, the function terminates.
         if (j == (to - 1)) {
           complete = true;
         }
@@ -135,7 +135,7 @@ int vec_max_between(Vec *xs, size_t from, size_t to) {
         break;
       }
     } // end of external for loop
-    // Location of the minimum element will be returned 
+    // Location of the minimum element will be returned
     return max_location;
   }
   // if 'from' is greater than 'to' it is confusing, therefore,
@@ -143,8 +143,8 @@ int vec_max_between(Vec *xs, size_t from, size_t to) {
   return -1;
 }
 
-void vec_sort(Vec *xs) {
-  // if xs is NULL the function terminates automatically. 
+void vec_sort(Vec* xs) {
+  // if xs is NULL the function terminates automatically.
   if (xs != NULL) {
     // Starting by index 0, the minimum element will be evaluated and swapped
     // with the left most index. The left index will then be shifted to the
@@ -155,7 +155,6 @@ void vec_sort(Vec *xs) {
     }
   }
 }
-
 
 void vec_print(Vec* xs) {
   printf("Vector at address %p has %ld elements and capacity %ld.\n", xs,

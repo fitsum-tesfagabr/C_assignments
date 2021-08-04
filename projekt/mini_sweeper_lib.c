@@ -1,40 +1,43 @@
 #include "./mini_sweeper_lib.h"
 #include "../tui/tui.h"
 #include "./game_matrix.h"
+#include "./menu.h"
 #include "./vec.h"
 #include <stdlib.h>
 #include <time.h>
 #include <unistd.h>
-#include "./menu.h"
 
 /* Read line by line */
-char* fgetline(FILE* file){
-   char* line = NULL;
-   size_t len = 0;
-   ssize_t success = getline(&line, &len, file);
-   if(success <= 0){
-        free(line);
-        return NULL;
-   }else{
-       line[success - 1] = '\0';
-       return line;
-   }
+char* fgetline(FILE* file) {
+  char* line = NULL;
+  size_t len = 0;
+  ssize_t success = getline(&line, &len, file);
+  if (success <= 0) {
+    free(line);
+    return NULL;
+  } else {
+    line[success - 1] = '\0';
+    return line;
+  }
 }
 
-void read_settings(GameState* gs, FILE* file){
-     char data[3][100];
-     fgets(data[0], sizeof(data[0]), file);
-     fgets(data[1], sizeof(data[1]), file);
-     fgets(data[2], sizeof(data[2]), file);
-     gs->play_field_width = atoi(data[0]) <= 50 && atoi(data[0]) >= 5 ? atoi(data[0]): 15;
-     gs->play_field_height = atoi(data[1]) <= 17 && atoi(data[1]) >= 5 ? atoi(data[1]): 15;
-     gs->probability = atof(data[2]) <= 1.0 && atof(data[2]) >= 0.01 ? atof(data[2]): 0.15;
+void read_settings(GameState* gs, FILE* file) {
+  char data[3][100];
+  fgets(data[0], sizeof(data[0]), file);
+  fgets(data[1], sizeof(data[1]), file);
+  fgets(data[2], sizeof(data[2]), file);
+  gs->play_field_width =
+      atoi(data[0]) <= 50 && atoi(data[0]) >= 5 ? atoi(data[0]) : 15;
+  gs->play_field_height =
+      atoi(data[1]) <= 17 && atoi(data[1]) >= 5 ? atoi(data[1]) : 15;
+  gs->probability =
+      atof(data[2]) <= 1.0 && atof(data[2]) >= 0.01 ? atof(data[2]) : 0.15;
 }
 
-void write_settings(GameState* gs, FILE* file){
-     fprintf(file, "%ld\n", gs->play_field_width);
-     fprintf(file, "%ld\n", gs->play_field_height);
-     fprintf(file, "%.2f\n", gs->probability);
+void write_settings(GameState* gs, FILE* file) {
+  fprintf(file, "%ld\n", gs->play_field_width);
+  fprintf(file, "%ld\n", gs->play_field_height);
+  fprintf(file, "%.2f\n", gs->probability);
 }
 
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
@@ -113,23 +116,20 @@ Cell* field_cell_at(GameState* gs, int x, int y) {
   return tui_cell_at(x + gs->play_field_begin.x, y + gs->play_field_begin.y);
 }
 
-void save_highscore(GameState* gs){
-      H_score* h_scores = malloc_or_exit(sizeof(H_score));
-      *h_scores = (H_score){
-        .points = gs->points,
-        .height = gs->play_field_height,
-        .width = gs->play_field_width,
-        .probability = (double) gs->probability,
-        .play_time = gs->play_time
-     };
-     vec_push(gs->highscores, h_scores);
-     
-     JsonValue* h_json = convert_highscores_vec_to_value(gs);
-     FILE* file = fopen("highscores.json", "w");
-     json_to_file(h_json, file);
-     fclose(file);
-     json_value_free(h_json);
-     
+void save_highscore(GameState* gs) {
+  H_score* h_scores = malloc_or_exit(sizeof(H_score));
+  *h_scores = (H_score){.points = gs->points,
+                        .height = gs->play_field_height,
+                        .width = gs->play_field_width,
+                        .probability = (double)gs->probability,
+                        .play_time = gs->play_time};
+  vec_push(gs->highscores, h_scores);
+
+  JsonValue* h_json = convert_highscores_vec_to_value(gs);
+  FILE* file = fopen("highscores.json", "w");
+  json_to_file(h_json, file);
+  fclose(file);
+  json_value_free(h_json);
 }
 
 bool handle_input(GameState* gs, char c) {
@@ -226,7 +226,7 @@ bool handle_input(GameState* gs, char c) {
           gs->explosion = true;
         }
         if (is_winner(gs) && !gs->explosion) {
-        gs->mode = PAUSE;
+          gs->mode = PAUSE;
           game_matrix_free(gs->new_game);
           gs->endgame_info = "** CONGRATULATIONS **";
           reset_game(gs, gs->mines);

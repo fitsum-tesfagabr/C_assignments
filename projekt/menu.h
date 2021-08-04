@@ -11,7 +11,7 @@
 #include "./reader.h"
 #include "./vec.h"
 
-typedef enum menu_list { SETTINGS, HIGHSCORES, MAIN } menu_list;
+typedef enum MenuList { SETTINGS, HIGHSCORES, MAIN } menu_list;
 
 typedef struct Menu_status {
   int menu_str_size[4];

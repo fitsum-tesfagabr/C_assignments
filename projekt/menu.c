@@ -103,9 +103,9 @@ bool handle_menu_input(GameState* gs, Menu_status* st, char c) {
       return true;
     }
     if (st->which_section == SETTINGS) {
-      
+
       FILE* fp = fopen("settings.tsv", "w");
-      if(fp == NULL){
+      if (fp == NULL) {
         exit(1);
       }
       write_settings(gs, fp);
@@ -238,23 +238,17 @@ void highscores_menu(GameState* gs, Menu_status* st) {
 
   char* file_name = "highscores.json";
   JsonValue* json = file_to_json(file_name);
-  if(json != NULL){
-        Vec* h_scores = json_to_highscores(json);
-        for(int i=0; i < vec_length(h_scores); i++){
-             
-             H_score* h = *vec_at(h_scores, i);
-             /* display points */
-             sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", 
-                                h->points, 
-                                h->play_time, 
-                                h->width, 
-                                h->height, 
-                                h->probability);
-             tui_set_str_at(3, 4 + i, buf[2 + i], FG_HI_WHITE, BG_BLACK);
+  if (json != NULL) {
+    Vec* h_scores = json_to_highscores(json);
+    for (int i = 0; i < vec_length(h_scores); i++) {
 
-             
-        }
-        vec_free(h_scores);
+      H_score* h = *vec_at(h_scores, i);
+      /* display points */
+      sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
+              h->width, h->height, h->probability);
+      tui_set_str_at(3, 4 + i, buf[2 + i], FG_HI_WHITE, BG_BLACK);
+    }
+    vec_free(h_scores);
   }
   json_value_free(json);
 }
@@ -265,8 +259,8 @@ void display_highscores(GameState* gs, Menu_status* st) {
 /*++++++++++++++++++++++++++++++++++++++++++++++++++++++*/
 JsonValue* file_to_json(const char* file_name) {
   FILE* file_output = fopen(file_name, "r");
-  if(!file_output){
-        return NULL;
+  if (!file_output) {
+    return NULL;
   }
   char* file_output_buff = readfile(file_output);
   fclose(file_output);
@@ -278,8 +272,8 @@ JsonValue* file_to_json(const char* file_name) {
   return json;
 }
 
-void json_to_file(JsonValue* json, FILE* file){
-    json_fprint_value(file, 0, json);
+void json_to_file(JsonValue* json, FILE* file) {
+  json_fprint_value(file, 0, json);
 }
 
 Vec* json_to_highscores(JsonValue* highscores_json) {
@@ -369,20 +363,20 @@ JsonValue* highscore_to_json(H_score* highscore) {
   return all;
 }
 
-JsonValue* convert_highscores_vec_to_value(GameState* gs){
-  vec_sort(gs->highscores); 
+JsonValue* convert_highscores_vec_to_value(GameState* gs) {
+  vec_sort(gs->highscores);
   Vec* members = vec_new();
   JsonMember* memb[10];
   char rank[10][100];
-    for(int i = 0; i < vec_length(gs->highscores); i++){
-        sprintf(rank[i], "%d", i);
-        H_score* hs = *vec_at(gs->highscores, i);
-        memb[i] = json_member_new(strcpy_malloc(rank[i]), highscore_to_json(hs));
-        vec_push(members, memb[i]);
-    }
-    JsonObject* score_res = json_object_new(members);
-    JsonValue* all = json_value_new_object(score_res);
-    return all;
+  for (int i = 0; i < vec_length(gs->highscores); i++) {
+    sprintf(rank[i], "%d", i);
+    H_score* hs = *vec_at(gs->highscores, i);
+    memb[i] = json_member_new(strcpy_malloc(rank[i]), highscore_to_json(hs));
+    vec_push(members, memb[i]);
+  }
+  JsonObject* score_res = json_object_new(members);
+  JsonValue* all = json_value_new_object(score_res);
+  return all;
 }
 
 void remove_file(char* file_name) {

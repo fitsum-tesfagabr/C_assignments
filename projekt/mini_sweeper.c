@@ -56,48 +56,48 @@ int main(int argc, char** argv) {
       .time_step = 0,
   };
   FILE* hfile;
-    if((hfile = fopen("highscores.json", "r"))){
-        fclose(hfile);
-        char* file_name = "highscores.json";
-        JsonValue* json = file_to_json(file_name);
-        if(json!= NULL){
-          game_state.highscores = json_to_highscores(json);
-       }
-        json_value_free(json);
-    }else{
-        game_state.highscores = vec_new();
+  if ((hfile = fopen("highscores.json", "r"))) {
+    fclose(hfile);
+    char* file_name = "highscores.json";
+    JsonValue* json = file_to_json(file_name);
+    if (json != NULL) {
+      game_state.highscores = json_to_highscores(json);
     }
+    json_value_free(json);
+  } else {
+    game_state.highscores = vec_new();
+  }
 
   /* Load settings from file if exist */
   FILE* file;
-   if((file = fopen("settings.tsv", "r"))){
-       if(file == NULL){
-       exit(1);
-       }
-       read_settings(&game_state, file);
-       fclose(file);
-   }else{
-        file = fopen("settings.tsv", "w");
-        if(file == NULL){
-         exit(1);
-        }
-   
-        write_settings(&game_state, file);
-        fclose(file);
+  if ((file = fopen("settings.tsv", "r"))) {
+    if (file == NULL) {
+      exit(1);
+    }
+    read_settings(&game_state, file);
+    fclose(file);
+  } else {
+    file = fopen("settings.tsv", "w");
+    if (file == NULL) {
+      exit(1);
+    }
 
-        file = fopen("settings.tsv", "r");
-        read_settings(&game_state, file);
-        fclose(file);
-   }
+    write_settings(&game_state, file);
+    fclose(file);
+
+    file = fopen("settings.tsv", "r");
+    read_settings(&game_state, file);
+    fclose(file);
+  }
 
   game_state.game_field = game_matrix_new(game_state.play_field_width,
                                           game_state.play_field_height, &c);
   Menu_status menu_state =
       (Menu_status){.menu_cursor_pos_y = 2, .which_section = MAIN};
   while (1) {
-  game_state.play_field_end =
-      (Int2){game_state.field_begin.x + game_state.play_field_width,
-             game_state.field_begin.y + game_state.play_field_height};
+    game_state.play_field_end =
+        (Int2){game_state.field_begin.x + game_state.play_field_width,
+               game_state.field_begin.y + game_state.play_field_height};
     /* Set default game dimention and default cell matrix */
     if (stdin_has_changed()) {
       char c = read_from_stdin();

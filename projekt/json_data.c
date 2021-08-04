@@ -81,7 +81,7 @@ JsonValue* json_member_value(JsonMember* m) {
 void json_member_free(JsonMember* m) {
   free(m->name);
   json_value_free(m->value);
-  //free(m);
+  // free(m);
 }
 
 // JsonValue ///////////////////////////////////////////////////////////////////
