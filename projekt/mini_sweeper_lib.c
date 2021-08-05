@@ -51,29 +51,39 @@ void draw_frame(GameState* gs) {
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
 void draw_info_bar(GameState* gs) {
   char buf[255];
-  char shortcut[6][255];
   if (gs->mode == PLAY) {
     gs->play_time = get_time() - gs->start_time;
   }
   sprintf(buf, "%d SECONDS", gs->play_time);
   tui_set_str_at(1, gs->play_field_end.y + 3, buf, FG_WHITE, BG_BLACK);
-  sprintf(shortcut[0], "SHORTCUTS");
-  tui_set_str_at(1, gs->play_field_end.y + 5, shortcut[0], FG_YELLOW, BG_BLACK);
 
-  sprintf(shortcut[1], "  Q      BACK TO MAIN MENU");
-  tui_set_str_at(1, gs->play_field_end.y + 6, shortcut[1], FG_WHITE, BG_BLACK);
+  char shortcut1[255];
+  sprintf(shortcut1, "SHORTCUTS");
+  tui_set_str_at(1, gs->play_field_end.y + 5, shortcut1, FG_YELLOW, BG_BLACK);
 
-  sprintf(shortcut[2], "  WSAD   MOVE CURSOR");
-  tui_set_str_at(1, gs->play_field_end.y + 7, shortcut[2], FG_WHITE, BG_BLACK);
+  char shortcut2[255];
+  sprintf(shortcut2, "  Q      BACK TO MAIN MENU");
+  tui_set_str_at(1, gs->play_field_end.y + 6, shortcut2, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[3], "  SPACE  UNCOVER FIELD");
-  tui_set_str_at(1, gs->play_field_end.y + 8, shortcut[3], FG_WHITE, BG_BLACK);
+  char shortcut3[255];
+  sprintf(shortcut3, "  WSAD   MOVE CURSOR");
+  tui_set_str_at(1, gs->play_field_end.y + 7, shortcut3, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[4], "  F      FLAG FIELD");
-  tui_set_str_at(1, gs->play_field_end.y + 9, shortcut[4], FG_WHITE, BG_BLACK);
+  char shortcut4[255];
+  sprintf(shortcut4, "  SPACE  UNCOVER FIELD");
+  tui_set_str_at(1, gs->play_field_end.y + 8, shortcut4, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[5], "%s", gs->endgame_info);
-  tui_set_str_at(1, gs->play_field_end.y + 11, shortcut[5], FG_RED, BG_BLACK);
+  char shortcut5[255];
+  sprintf(shortcut5, "  F      FLAG FIELD");
+  tui_set_str_at(1, gs->play_field_end.y + 9, shortcut5, FG_WHITE, BG_BLACK);
+
+  char shortcut6[255];
+  sprintf(shortcut6, "%s", gs->endgame_info);
+  char* fg_color = FG_GREEN;
+  if(gs->explosion){
+        fg_color = FG_RED;
+  }
+  tui_set_str_at(1, gs->play_field_end.y + 11, shortcut6, fg_color, BG_BLACK);
 }
 
 bool is_field_coordinate(GameState* gs, int x, int y) {
@@ -180,6 +190,7 @@ bool handle_input(GameState* gs, char c) {
         reset_game(gs, gs->mines);
         reset_game(gs, gs->no_mines);
         reset_game(gs, gs->flags);
+        gs->play_time = gs->play_time > 0 ? gs->play_time : 1;
         gs->points = gs->play_field_width * gs->play_field_height *
                      gs->probability * (1000.0 / gs->play_time);
         save_highscore(gs);
@@ -219,6 +230,7 @@ bool handle_input(GameState* gs, char c) {
           reset_game(gs, gs->mines);
           reset_game(gs, gs->no_mines);
           reset_game(gs, gs->flags);
+          gs->play_time = gs->play_time > 0 ? gs->play_time : 1;
           gs->points = gs->play_field_width * gs->play_field_height *
                        gs->probability * (1000.0 / gs->play_time);
           save_highscore(gs);

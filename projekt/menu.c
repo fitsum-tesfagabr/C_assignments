@@ -23,8 +23,6 @@ void draw_menu(GameState* gs, Menu_status* st) {
 
 void main_menu(GameState* gs, Menu_status* st) {
 
-  char buf[5][255];
-  char shortcut[5][255];
 
   for (int i = 0; i < 4; i++) {
     st->highlight_color[i] = FG_WHITE;
@@ -32,45 +30,57 @@ void main_menu(GameState* gs, Menu_status* st) {
 
   highlight_menu_cursor(st);
 
-  sprintf(buf[0], "MINESWEEPER");
-  tui_set_str_at(1, 1, buf[0], FG_HI_CYAN, BG_BLACK);
+  char buf1[255];
+  sprintf(buf1, "MINESWEEPER");
+  tui_set_str_at(1, 1, buf1, FG_HI_CYAN, BG_BLACK);
 
-  sprintf(buf[1], "NEW GAME");
-  tui_set_str_at(3, 2, buf[1], st->highlight_color[0], BG_BLACK);
+  char buf2[255];
+  sprintf(buf2, "NEW GAME");
+  tui_set_str_at(3, 2, buf2, st->highlight_color[0], BG_BLACK);
 
-  sprintf(buf[2], "SETTINGS");
-  tui_set_str_at(3, 3, buf[2], st->highlight_color[1], BG_BLACK);
+  char buf3[255];
+  sprintf(buf3, "SETTINGS");
+  tui_set_str_at(3, 3, buf3, st->highlight_color[1], BG_BLACK);
 
-  sprintf(buf[3], "HIGHSCORES");
-  tui_set_str_at(3, 4, buf[3], st->highlight_color[2], BG_BLACK);
+  char buf4[255];
+  sprintf(buf4, "HIGHSCORES");
+  tui_set_str_at(3, 4, buf4, st->highlight_color[2], BG_BLACK);
 
-  sprintf(buf[4], "EXIT");
-  tui_set_str_at(3, 5, buf[4], st->highlight_color[3], BG_BLACK);
+  char buf5[255];
+  sprintf(buf5, "EXIT");
+  tui_set_str_at(3, 5, buf5, st->highlight_color[3], BG_BLACK);
 
-  sprintf(shortcut[0], "SHORTCUTS");
-  tui_set_str_at(1, 7, shortcut[0], FG_YELLOW, BG_BLACK);
+  char shortcut1[255];
+  sprintf(shortcut1, "SHORTCUTS");
+  tui_set_str_at(1, 7, shortcut1, FG_YELLOW, BG_BLACK);
 
-  sprintf(shortcut[1], "  Q      EXIT GAME");
-  tui_set_str_at(1, 8, shortcut[1], FG_WHITE, BG_BLACK);
+  char shortcut2[255];
+  sprintf(shortcut2, "  Q      EXIT GAME");
+  tui_set_str_at(1, 8, shortcut2, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[2], "  W      PREVIOUS ITEM");
-  tui_set_str_at(1, 9, shortcut[2], FG_WHITE, BG_BLACK);
+  char shortcut3[255];
+  sprintf(shortcut3, "  W      PREVIOUS ITEM");
+  tui_set_str_at(1, 9, shortcut3, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[3], "  S      NEXT ITEM");
-  tui_set_str_at(1, 10, shortcut[3], FG_WHITE, BG_BLACK);
+  char shortcut4[255];
+  sprintf(shortcut4, "  S      NEXT ITEM");
+  tui_set_str_at(1, 10, shortcut4, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[4], "  SPACE  ACTIVATE ITEM");
-  tui_set_str_at(1, 11, shortcut[4], FG_WHITE, BG_BLACK);
+  char shortcut5[255];
+  sprintf(shortcut5, "  SPACE  ACTIVATE ITEM");
+  tui_set_str_at(1, 11, shortcut5, FG_WHITE, BG_BLACK);
 
-  char info[3][255];
-  sprintf(info[0], "GAME INFORMATION");
-  tui_set_str_at(1, 13, info[0], FG_HI_MAGENTA, BG_BLACK);
+  char info1[255];
+  sprintf(info1, "GAME INFORMATION");
+  tui_set_str_at(1, 13, info1, FG_HI_MAGENTA, BG_BLACK);
 
-  sprintf(info[1], "MIN. PLAY FIELD DIMENTION (W X H) = 5 X 5");
-  tui_set_str_at(3, 14, info[1], FG_HI_BLUE, BG_BLACK);
+  char info2[255];
+  sprintf(info2, "MIN. PLAY FIELD DIMENTION (W X H) = 5 X 5");
+  tui_set_str_at(3, 14, info2, FG_HI_BLUE, BG_BLACK);
 
-  sprintf(info[2], "MAX. PLAY FIELD DIMENTION (W X H) = 50 X 17");
-  tui_set_str_at(3, 15, info[2], FG_HI_BLUE, BG_BLACK);
+  char info3[255];
+  sprintf(info3, "MAX. PLAY FIELD DIMENTION (W X H) = 50 X 17");
+  tui_set_str_at(3, 15, info3, FG_HI_BLUE, BG_BLACK);
 }
 
 void highlight_menu_cursor(Menu_status* st) {
@@ -191,46 +201,55 @@ bool handle_menu_input(GameState* gs, Menu_status* st, char c) {
   return false;
 }
 
+
 void settings_menu(GameState* gs, Menu_status* st) {
 
-  char buf[4][255];
-  char shortcut[6][255];
 
   for (int i = 0; i < 3; i++) {
     st->highlight_color[i] = FG_WHITE;
   }
 
   highlight_menu_cursor(st);
+  
+  char buf1[255];
+  sprintf(buf1, "OPTIONS");
+  tui_set_str_at(1, 1, buf1, FG_HI_CYAN, BG_BLACK);
+  
+  char buf2[255];
+  sprintf(buf2, "WIDTH        %ld", gs->play_field_width);
+  tui_set_str_at(3, 2, buf2, st->highlight_color[0], BG_BLACK);
 
-  sprintf(buf[0], "OPTIONS");
-  tui_set_str_at(1, 1, buf[0], FG_HI_CYAN, BG_BLACK);
+  char buf3[255];
+  sprintf(buf3, "HEIGHT       %ld", gs->play_field_height);
+  tui_set_str_at(3, 3, buf3, st->highlight_color[1], BG_BLACK);
 
-  sprintf(buf[1], "WIDTH        %ld", gs->play_field_width);
-  tui_set_str_at(3, 2, buf[1], st->highlight_color[0], BG_BLACK);
+  char buf4[255];
+  sprintf(buf4, "PROBABILITY  %.2f", gs->probability);
+  tui_set_str_at(3, 4, buf4, st->highlight_color[2], BG_BLACK);
 
-  sprintf(buf[2], "HEIGHT       %ld", gs->play_field_height);
-  tui_set_str_at(3, 3, buf[2], st->highlight_color[1], BG_BLACK);
+  char shortcut1[255];
+  sprintf(shortcut1, "SHORTCUTS");
+  tui_set_str_at(1, 7, shortcut1, FG_YELLOW, BG_BLACK);
 
-  sprintf(buf[3], "PROBABILITY  %.2f", gs->probability);
-  tui_set_str_at(3, 4, buf[3], st->highlight_color[2], BG_BLACK);
+  char shortcut2[255];
+  sprintf(shortcut2, "  Q   GO BACK");
+  tui_set_str_at(1, 8, shortcut2, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[0], "SHORTCUTS");
-  tui_set_str_at(1, 7, shortcut[0], FG_YELLOW, BG_BLACK);
+  char shortcut3[255];
+  sprintf(shortcut3, "  W   PREVIOUS ITEM");
+  tui_set_str_at(1, 9, shortcut3, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[1], "  Q   GO BACK");
-  tui_set_str_at(1, 8, shortcut[1], FG_WHITE, BG_BLACK);
+  char shortcut4[255];
+  sprintf(shortcut4, "  S   NEXT ITEM");
+  tui_set_str_at(1, 10, shortcut4, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[2], "  W   PREVIOUS ITEM");
-  tui_set_str_at(1, 9, shortcut[2], FG_WHITE, BG_BLACK);
+  char shortcut5[255];
+  sprintf(shortcut5, "  A   DECREASE SELECTED ITEM");
+  tui_set_str_at(1, 11, shortcut5, FG_WHITE, BG_BLACK);
 
-  sprintf(shortcut[3], "  S   NEXT ITEM");
-  tui_set_str_at(1, 10, shortcut[3], FG_WHITE, BG_BLACK);
-
-  sprintf(shortcut[4], "  A   DECREASE SELECTED ITEM");
-  tui_set_str_at(1, 11, shortcut[4], FG_WHITE, BG_BLACK);
-
-  sprintf(shortcut[5], "  D   INCREASE SELECTED ITEM");
-  tui_set_str_at(1, 12, shortcut[5], FG_WHITE, BG_BLACK);
+  char shortcut6[255];
+  sprintf(shortcut6, "  D   INCREASE SELECTED ITEM");
+  tui_set_str_at(1, 12, shortcut6, FG_WHITE, BG_BLACK);
 }
 
 void settings(GameState* gs, Menu_status* st) {
@@ -239,13 +258,14 @@ void settings(GameState* gs, Menu_status* st) {
 
 void highscores_menu(GameState* gs, Menu_status* st) {
 
-  char buf[12][255];
+  char buf1[255];
+  char buf2[255];
 
-  sprintf(buf[0], "TOP 10 HIGHSCORES");
-  tui_set_str_at(1, 1, buf[0], FG_HI_YELLOW, BG_BLACK);
+  sprintf(buf1, "TOP 10 HIGHSCORES");
+  tui_set_str_at(1, 1, buf1, FG_HI_YELLOW, BG_BLACK);
 
-  sprintf(buf[1], "POINTS   TIME   WIDTH   HEIGHT   PROBABILITY");
-  tui_set_str_at(3, 3, buf[1], FG_WHITE, BG_BLACK);
+  sprintf(buf2, "POINTS   TIME   WIDTH   HEIGHT   PROBABILITY");
+  tui_set_str_at(3, 3, buf2, FG_HI_YELLOW, BG_BLACK);
 
   char* file_name = "highscores.json";
   if (vec_length(gs->highscores) > 0) {
@@ -253,17 +273,25 @@ void highscores_menu(GameState* gs, Menu_status* st) {
     if (json != NULL) {
       Vec* h_scores = json_to_highscores(json);
       for (int i = 0; i < vec_length(h_scores); i++) {
-
+        char buf3[255];
         H_score* h = *vec_at(h_scores, i);
         /* display points */
-        sprintf(buf[2 + i], "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
+        sprintf(buf3, "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
                 h->width, h->height, h->probability);
-        tui_set_str_at(3, 4 + i, buf[2 + i], FG_HI_WHITE, BG_BLACK);
+        tui_set_str_at(3, 4 + i, buf3, FG_HI_WHITE, BG_BLACK);
       }
       vec_free(h_scores);
     }
     json_value_free(json);
   }
+  
+  char shortcut1[255];
+  sprintf(shortcut1, "SHORTCUTS");
+  tui_set_str_at(1, 16, shortcut1, FG_YELLOW, BG_BLACK);
+
+  char shortcut2[255];
+  sprintf(shortcut2, "  Q   GO BACK");
+  tui_set_str_at(1, 17, shortcut2, FG_WHITE, BG_BLACK);
 }
 
 void display_highscores(GameState* gs, Menu_status* st) {
@@ -378,14 +406,17 @@ JsonValue* highscore_to_json(H_score* highscore) {
 
 JsonValue* convert_highscores_vec_to_value(GameState* gs) {
   vec_sort(gs->highscores);
+  while(vec_length(gs->highscores) > 10){
+        vec_pop(gs->highscores);
+  }
   Vec* members = vec_new();
-  JsonMember* memb[10];
-  char rank[10][100];
+  //JsonMember* memb[10];
   for (int i = 0; i < vec_length(gs->highscores); i++) {
-    sprintf(rank[i], "%d", i);
+    char rank[255];
+    sprintf(rank, "%d", i);
     H_score* hs = *vec_at(gs->highscores, i);
-    memb[i] = json_member_new(strcpy_malloc(rank[i]), highscore_to_json(hs));
-    vec_push(members, memb[i]);
+    JsonMember* memb = json_member_new(strcpy_malloc(rank), highscore_to_json(hs));
+    vec_push(members, memb);
   }
   JsonObject* score_res = json_object_new(members);
   JsonValue* all = json_value_new_object(score_res);
