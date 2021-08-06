@@ -7,24 +7,37 @@
 #include <time.h>
 #include <unistd.h>
 
+/* Returns current time, which increments every second. */
 time_t get_time() {
   time_t now = time(0);
   return now;
 }
 
+/* Read Game settings from a file. */
 void read_settings(GameState* gs, FILE* file) {
-  char data[3][100];
-  fgets(data[0], sizeof(data[0]), file);
-  fgets(data[1], sizeof(data[1]), file);
-  fgets(data[2], sizeof(data[2]), file);
+  char width[100];
+  char height[100];
+  char probability[100];
+  fgets(width, sizeof(width), file);
+  fgets(height, sizeof(height), file);
+  fgets(probability, sizeof(probability), file);
+
+  /* The width is defined to be in between 5 and 50. Default is 15 */
   gs->play_field_width =
-      atoi(data[0]) <= 50 && atoi(data[0]) >= 5 ? atoi(data[0]) : 15;
+      atoi(width) <= 50 && atoi(width) >= 5 ? atoi(width) : 15;
+
+  /* The height is defined to be in between 5 and 17. Default is 15 */
   gs->play_field_height =
-      atoi(data[1]) <= 17 && atoi(data[1]) >= 5 ? atoi(data[1]) : 15;
-  gs->probability =
-      atof(data[2]) <= 1.0 && atof(data[2]) >= 0.01 ? atof(data[2]) : 0.15;
+      atoi(height) <= 17 && atoi(height) >= 5 ? atoi(height) : 15;
+
+  /* The probability is defined to be a in between 1% and 100%. Default is 15%
+   */
+  gs->probability = atof(probability) <= 1.0 && atof(probability) >= 0.01
+                        ? atof(probability)
+                        : 0.15;
 }
 
+/* Write Game settings to file. */
 void write_settings(GameState* gs, FILE* file) {
   fprintf(file, "%ld\n", gs->play_field_width);
   fprintf(file, "%ld\n", gs->play_field_height);
@@ -35,13 +48,17 @@ void write_settings(GameState* gs, FILE* file) {
 void draw_frame(GameState* gs) {
   Cell c = (Cell){
       .content = ' ', .text_color = FG_WHITE, .background_color = BG_WHITE};
+
   Int2 frame_begin = {gs->field_begin.x, gs->field_begin.y};
   Int2 frame_end = {gs->field_begin.x + gs->play_field_width + 2,
                     gs->field_begin.y + gs->play_field_height + 2};
+  /* Print Top and Bottom and Frame edges. */
   for (size_t x = frame_begin.x; x < frame_end.x; ++x) {
     *tui_cell_at(x, frame_begin.y) = c;
     *tui_cell_at(x, frame_end.y - 1) = c;
   }
+
+  /* Print Left and Right Frame edges. */
   for (size_t y = frame_begin.y; y < frame_end.y; ++y) {
     *tui_cell_at(frame_begin.x, y) = c;
     *tui_cell_at(frame_end.x - 1, y) = c;
@@ -51,9 +68,11 @@ void draw_frame(GameState* gs) {
 /*++++++++++++++++++++++++++++++++++++++++++++++++*/
 void draw_info_bar(GameState* gs) {
   char buf[255];
+
   if (gs->mode == PLAY) {
     gs->play_time = get_time() - gs->start_time;
   }
+
   sprintf(buf, "%d SECONDS", gs->play_time);
   tui_set_str_at(1, gs->play_field_end.y + 3, buf, FG_WHITE, BG_BLACK);
 
@@ -80,12 +99,13 @@ void draw_info_bar(GameState* gs) {
   char shortcut6[255];
   sprintf(shortcut6, "%s", gs->endgame_info);
   char* fg_color = FG_GREEN;
-  if(gs->explosion){
-        fg_color = FG_RED;
+  if (gs->explosion) {
+    fg_color = FG_RED;
   }
   tui_set_str_at(1, gs->play_field_end.y + 11, shortcut6, fg_color, BG_BLACK);
 }
 
+/* Approve if cell is inside Play field. */
 bool is_field_coordinate(GameState* gs, int x, int y) {
   bool x_is_valid = gs->play_field_begin.x <= x && x <= gs->play_field_end.x;
   bool y_is_valid = gs->play_field_begin.y <= y && y <= gs->play_field_end.y;
@@ -117,7 +137,17 @@ Cell* field_cell_at(GameState* gs, int x, int y) {
   return tui_cell_at(x + gs->play_field_begin.x, y + gs->play_field_begin.y);
 }
 
+/* Save highscore infor to file. */
 void save_highscore(GameState* gs) {
+  gs->mode = PAUSE;
+  game_matrix_free(gs->new_game);
+  gs->endgame_info = "** CONGRATULATIONS **";
+  reset_game(gs, gs->mines);
+  reset_game(gs, gs->no_mines);
+  reset_game(gs, gs->flags);
+  gs->play_time = gs->play_time > 0 ? gs->play_time : 1;
+  gs->points = gs->play_field_width * gs->play_field_height * gs->probability *
+               (1000.0 / gs->play_time);
   H_score* h_scores = malloc_or_exit(sizeof(H_score));
   *h_scores = (H_score){.points = gs->points,
                         .height = gs->play_field_height,
@@ -184,15 +214,6 @@ bool handle_input(GameState* gs, char c) {
         gs->count_flags--;
       }
       if (is_winner(gs)) {
-        gs->mode = PAUSE;
-        game_matrix_free(gs->new_game);
-        gs->endgame_info = "** CONGRATULATIONS **";
-        reset_game(gs, gs->mines);
-        reset_game(gs, gs->no_mines);
-        reset_game(gs, gs->flags);
-        gs->play_time = gs->play_time > 0 ? gs->play_time : 1;
-        gs->points = gs->play_field_width * gs->play_field_height *
-                     gs->probability * (1000.0 / gs->play_time);
         save_highscore(gs);
       }
     }
@@ -224,15 +245,6 @@ bool handle_input(GameState* gs, char c) {
           gs->explosion = true;
         }
         if (is_winner(gs) && !gs->explosion) {
-          gs->mode = PAUSE;
-          game_matrix_free(gs->new_game);
-          gs->endgame_info = "** CONGRATULATIONS **";
-          reset_game(gs, gs->mines);
-          reset_game(gs, gs->no_mines);
-          reset_game(gs, gs->flags);
-          gs->play_time = gs->play_time > 0 ? gs->play_time : 1;
-          gs->points = gs->play_field_width * gs->play_field_height *
-                       gs->probability * (1000.0 / gs->play_time);
           save_highscore(gs);
         }
       } // end of next if check for cell

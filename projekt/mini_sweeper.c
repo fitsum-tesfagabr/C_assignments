@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
     exit(1);
   } // end of if
 
-  /* Define Frame */
+  /* Define Field Dimention */
   Int2 field_begin = {1, 1};
   Int2 field_end = {term_size.x - 1, term_size.y - 1};
   Int2 field_size = {field_end.x - field_begin.x, field_end.y - field_begin.y};
@@ -31,9 +31,10 @@ int main(int argc, char** argv) {
   /* Default cell */
   Cell c = (Cell){
       .content = '.', .text_color = FG_WHITE, .background_color = BG_BLACK};
+
   /* Initialize the game state */
   GameState game_state = {
-      .term_size = {term_size.x, term_size.y}, /* Convert Size2 to Int2. */
+      .term_size = {term_size.x, term_size.y},
       .field_begin = field_begin,
       .field_end = field_end,
       .field_size = field_size,
@@ -56,20 +57,27 @@ int main(int argc, char** argv) {
       .no_mines = vec_new(),
       .time_step = 0,
   };
+
   FILE* hfile;
+  /* If There are previously stored highscore values, they will be loaded and
+   * used in the game highscore info. */
   if ((hfile = fopen("highscores.json", "r"))) {
     fclose(hfile);
+
     char* file_name = "highscores.json";
     JsonValue* json = file_to_json(file_name);
+
     if (json != NULL) {
       game_state.highscores = json_to_highscores(json);
     }
     json_value_free(json);
   } else {
+    /* If there was no previous highscores, a new vector will be created to save
+     * all newly registered highscores. */
     game_state.highscores = vec_new();
   }
 
-  /* Load settings from file if exist */
+  /* Load Game settings from file if exist */
   FILE* file;
   if ((file = fopen("settings.tsv", "r"))) {
     if (file == NULL) {
@@ -91,6 +99,8 @@ int main(int argc, char** argv) {
     fclose(file);
   }
 
+  /* The mine sweeper field cells are represented in a matrix form based on the
+   * settings set by user. Or based on default values.*/
   game_state.game_field = game_matrix_new(game_state.play_field_width,
                                           game_state.play_field_height, &c);
   Menu_status menu_state =
@@ -99,7 +109,7 @@ int main(int argc, char** argv) {
     game_state.play_field_end =
         (Int2){game_state.field_begin.x + game_state.play_field_width,
                game_state.field_begin.y + game_state.play_field_height};
-    /* Set default game dimention and default cell matrix */
+
     if (stdin_has_changed()) {
       char c = read_from_stdin();
 

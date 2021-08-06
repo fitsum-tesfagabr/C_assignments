@@ -23,7 +23,6 @@ void draw_menu(GameState* gs, Menu_status* st) {
 
 void main_menu(GameState* gs, Menu_status* st) {
 
-
   for (int i = 0; i < 4; i++) {
     st->highlight_color[i] = FG_WHITE;
   }
@@ -201,20 +200,18 @@ bool handle_menu_input(GameState* gs, Menu_status* st, char c) {
   return false;
 }
 
-
 void settings_menu(GameState* gs, Menu_status* st) {
-
 
   for (int i = 0; i < 3; i++) {
     st->highlight_color[i] = FG_WHITE;
   }
 
   highlight_menu_cursor(st);
-  
+
   char buf1[255];
   sprintf(buf1, "OPTIONS");
   tui_set_str_at(1, 1, buf1, FG_HI_CYAN, BG_BLACK);
-  
+
   char buf2[255];
   sprintf(buf2, "WIDTH        %ld", gs->play_field_width);
   tui_set_str_at(3, 2, buf2, st->highlight_color[0], BG_BLACK);
@@ -276,15 +273,15 @@ void highscores_menu(GameState* gs, Menu_status* st) {
         char buf3[255];
         H_score* h = *vec_at(h_scores, i);
         /* display points */
-        sprintf(buf3, "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time,
-                h->width, h->height, h->probability);
+        sprintf(buf3, "%6d%7d%8d%9d%14.2f\t", h->points, h->play_time, h->width,
+                h->height, h->probability);
         tui_set_str_at(3, 4 + i, buf3, FG_HI_WHITE, BG_BLACK);
       }
       vec_free(h_scores);
     }
     json_value_free(json);
   }
-  
+
   char shortcut1[255];
   sprintf(shortcut1, "SHORTCUTS");
   tui_set_str_at(1, 16, shortcut1, FG_YELLOW, BG_BLACK);
@@ -406,16 +403,17 @@ JsonValue* highscore_to_json(H_score* highscore) {
 
 JsonValue* convert_highscores_vec_to_value(GameState* gs) {
   vec_sort(gs->highscores);
-  while(vec_length(gs->highscores) > 10){
-        vec_pop(gs->highscores);
+  while (vec_length(gs->highscores) > 10) {
+    vec_pop(gs->highscores);
   }
   Vec* members = vec_new();
-  //JsonMember* memb[10];
+  // JsonMember* memb[10];
   for (int i = 0; i < vec_length(gs->highscores); i++) {
     char rank[255];
     sprintf(rank, "%d", i);
     H_score* hs = *vec_at(gs->highscores, i);
-    JsonMember* memb = json_member_new(strcpy_malloc(rank), highscore_to_json(hs));
+    JsonMember* memb =
+        json_member_new(strcpy_malloc(rank), highscore_to_json(hs));
     vec_push(members, memb);
   }
   JsonObject* score_res = json_object_new(members);
