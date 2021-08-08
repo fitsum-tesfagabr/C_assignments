@@ -196,6 +196,13 @@ bool handle_menu_input(GameState* gs, Menu_status* st, char c) {
       select_menu(gs, st);
     }
     break;
+  case 'c':
+    if (st->which_section == HIGHSCORES) {
+      while (vec_length(gs->highscores) > 0) {
+        vec_pop(gs->highscores);
+      }
+      remove_file("highscores.json");
+    }
   }
   return false;
 }
@@ -289,6 +296,10 @@ void highscores_menu(GameState* gs, Menu_status* st) {
   char shortcut2[255];
   sprintf(shortcut2, "  Q   GO BACK");
   tui_set_str_at(1, 17, shortcut2, FG_WHITE, BG_BLACK);
+
+  char shortcut3[255];
+  sprintf(shortcut3, "  C   CLEAR ALL HIGHSCORES");
+  tui_set_str_at(1, 18, shortcut3, FG_WHITE, BG_BLACK);
 }
 
 void display_highscores(GameState* gs, Menu_status* st) {
