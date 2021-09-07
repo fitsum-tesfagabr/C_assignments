@@ -27,7 +27,7 @@
   - Felder mit Fahnen können nicht mehr aufgedeckt werden (2P)
   - Fahnen werden korrekt gezeichnet mit verschiedenen Farben beim Aufdecken (2P)
   
-**<span style="color: red"> [-2P] </span>** Leider werden die Fahnen gelöscht nach Spielende.
+**[-2P]** Leider werden die Fahnen gelöscht nach Spielende.
 
 #### Spiel wird mit 'q' beendet - 1P
 +++
